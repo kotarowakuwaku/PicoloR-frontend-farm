@@ -1,19 +1,14 @@
 {
   "name": "picolor-frontend-farm",
   "version": "1.0.0",
-  "homepage": "https://kotarowakuwaku.github.io/PicoloR-frontend-farm",
   "scripts": {
     "dev": "farm start",
     "start": "farm start",
     "build": "farm build",
     "preview": "farm preview",
-    "clean": "farm clean",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "clean": "farm clean"
   },
   "dependencies": {
-    "@pandacss/dev": "^0.53.1",
-    "antd": "^5.24.3",
     "react": "18",
     "react-dom": "18"
   },
@@ -22,9 +17,8 @@
     "@farmfe/core": "^1.6.7",
     "@farmfe/plugin-react": "^1.2.0",
     "@types/react": "18",
-    "@types/react-dom": "18",
     "core-js": "^3.36.1",
-    "gh-pages": "^6.3.0",
+    "@types/react-dom": "18",
     "react-refresh": "^0.14.0"
   }
 }
