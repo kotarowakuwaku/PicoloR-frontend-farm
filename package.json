@@ -6,7 +6,9 @@
     "start": "farm start",
     "build": "farm build",
     "preview": "farm preview",
-    "clean": "farm clean"
+    "clean": "farm clean",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@pandacss/dev": "^0.53.1",
@@ -21,6 +23,7 @@
     "@types/react": "18",
     "@types/react-dom": "18",
     "core-js": "^3.36.1",
+    "gh-pages": "^6.3.0",
     "react-refresh": "^0.14.0"
   }
 }
