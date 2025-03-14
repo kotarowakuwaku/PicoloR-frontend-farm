@@ -1,5 +1,9 @@
-import { defineConfig } from '@farmfe/core';
+import { defineFarmConfig } from "@farmfe/core";
 
-export default defineConfig({
-  plugins: ['@farmfe/plugin-react']
+export default defineFarmConfig({
+  compilation: {
+    output: {
+      publicPath: "/PicoloR-frontend-farm/", // GitHub Pages 用にリポジトリ名を設定
+    },
+  },
 });
