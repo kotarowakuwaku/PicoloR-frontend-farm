@@ -1,7 +1,7 @@
 {
   "name": "picolor-frontend-farm",
   "version": "1.0.0",
-  "homepage": "https://kotarowakuwaku.github.io/PicoloR-frontend-farm",
+  "homepage": "https://kotarowakuwaku.github.io/PicoloR-frontend-farm/",
   "scripts": {
     "dev": "farm start",
     "start": "farm start",
