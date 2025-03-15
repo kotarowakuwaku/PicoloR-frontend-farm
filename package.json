@@ -9,12 +9,13 @@
     "preview": "farm preview",
     "clean": "farm clean",
     "predeploy": "npm run build",
-  "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "gh-pages": "^6.3.0",
     "react": "18",
-    "react-dom": "18"
+    "react-dom": "18",
+    "react-router-dom": "^7.3.0"
   },
   "devDependencies": {
     "@farmfe/cli": "^1.0.4",
