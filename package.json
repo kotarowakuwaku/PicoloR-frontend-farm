@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "homepage": "https://kotarowakuwaku.github.io/PicoloR-frontend-farm/",
   "scripts": {
+    "prepare": "panda codegen",
     "dev": "farm start",
     "start": "farm start",
     "build": "farm build",
@@ -21,6 +22,7 @@
     "@farmfe/cli": "^1.0.4",
     "@farmfe/core": "^1.6.7",
     "@farmfe/plugin-react": "^1.2.0",
+    "@pandacss/dev": "^0.53.1",
     "@types/react": "18",
     "@types/react-dom": "18",
     "core-js": "^3.36.1",

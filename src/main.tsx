@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import './main.css';
-import reactLogo from './assets/react.svg';
-import FarmLogo from './assets/logo.png';
+import { useState } from "react";
+import "./main.css";
+import reactLogo from "./assets/react.svg";
+import FarmLogo from "./assets/logo.png";
+import { css } from "../styled-system/css";
 export function Main() {
   const [count, setCount] = useState(0);
 
@@ -15,7 +16,7 @@ export function Main() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Farm + React</h1>
+      <h1 className={css({ bg: "blue.400" })}>Farm + React</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
