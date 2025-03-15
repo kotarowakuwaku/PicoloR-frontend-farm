@@ -15,18 +15,13 @@ const Header: React.FC<HeaderProps> = ({ mode }) => {
         @import url('https://fonts.googleapis.com/css2?family=Londrina+Solid&display=swap');
 
         .header {
-          /* テキストを大きめに */
           font-size: 4rem;
-          /* h1 のデフォルトマージンをリセット */
-          margin: 0;
-          /* relative を維持して絶対配置の要素の基準に */
-          position: relative;
-          /* Flexbox でレイアウト。画面全体の幅を確保し、左寄せ */
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
+          margin: 1rem;
+          position: absolute;
+          top: 0;
+          left: 0;
           width: 100%;
-          /* 使用するフォント */
+          display: flex;
           font-family: 'Londrina Solid', sans-serif;
         }
 
@@ -55,7 +50,6 @@ const Header: React.FC<HeaderProps> = ({ mode }) => {
 
       <h1 className={`header ${modeClass}`}>
         <span className="black-text">PiColor</span>
-
         <span className="colored-text">PiColor</span>
       </h1>
     </>
