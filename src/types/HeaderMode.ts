@@ -1,4 +1,4 @@
-enum HeaderMode {
+export const enum HeaderMode {
   NONE = "none",
   GREEN = "green",
   GRAY = "gray",
