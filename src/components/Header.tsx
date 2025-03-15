@@ -7,8 +7,6 @@ const Header: React.FC<HeaderProps> = ({ mode }) => {
   if (mode === HeaderMode.NONE) {
     return null;
   }
-
-  // mode に応じてクラスを付与
   const modeClass = mode === HeaderMode.GREEN ? "green" : "gray";
 
   return (
