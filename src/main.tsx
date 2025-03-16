@@ -1,37 +1,29 @@
 import Header from "./components/Header";
 import { HeaderMode } from "./types/HeaderMode";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button } from "antd";
-import useCountdown from "./hooks/useCountdown";
 import CountdownModal from "./components/CountdownModal";
+import useCountdown from "./hooks/useCountdown";
 
 const Main: React.FC = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [initialCount, setInitialCount] = useState<number>(5);
 
-  // モーダル表示時にのみカウントダウンを実行
-  const count = useCountdown(initialCount, modalVisible);
+  const { count, isCounting, startCountdown } = useCountdown(() => {
+    setModalVisible(false);
+    console.log("カウントダウン終了");
+  });
 
-  useEffect(() => {
-    if (modalVisible && count === 0) {
-      setModalVisible(false);
-      console.log("カウントダウン終了");
-    }
-  }, [modalVisible, count]);
-
-  const startCountdown = () => {
-    setInitialCount(5);
-    setModalVisible(true);
-    console.log("カウントダウン開始")
+  const handleClick = () => {
+    startCountdown(5); // 5秒のカウントダウン開始
   };
 
   return (
     <div>
       <Header mode={HeaderMode.GREEN} />
-      <Button type="primary" onClick={startCountdown}>
+      <Button type="primary" onClick={handleClick}>
         カウントダウン開始
       </Button>
-      <CountdownModal visible={modalVisible} count={count} />
+      <CountdownModal visible={isCounting} count={count} />
     </div>
   );
 };

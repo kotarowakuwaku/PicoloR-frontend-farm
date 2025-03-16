@@ -1,26 +1,37 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from "react";
+import type UseCountdownResult from "../types/Countdown";
 
-const useCountdown = (initialCount: number, isActive: boolean): number => {
-  const [count, setCount] = useState<number>(initialCount);
-
- //カウントのリセット
-  useEffect(() => {
+const useCountdown = (onComplete?: () => void): UseCountdownResult => {
+  const startCountdown = useCallback((initialCount: number) => {
     setCount(initialCount);
-  }, [initialCount]);
+    setIsCounting(true);
+  }, []);
 
-  // isActive が true の場合にカウントダウンを実施
+  const [count, setCount] = useState<number>(0);
+  const [isCounting, setIsCounting] = useState<boolean>(false);
+
   useEffect(() => {
-    if (!isActive) return;
-    if (count <= 0) return;
+    if (!isCounting || count <= 0) {
+      if (count === 0 && isCounting) {
+        setIsCounting(false);
+      }
+      return;
+    }
 
     const timer = setTimeout(() => {
-      setCount(prevCount => prevCount - 1);
+      setCount((prev) => prev - 1);
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [count, isActive]);
+  }, [count, isCounting]);
 
-  return count;
+  useEffect(() => {
+    if (isCounting && count === 0) {
+      setIsCounting(false);
+      if (onComplete) onComplete();
+    }
+  }, [count, isCounting, onComplete]);
+
+  return { count, isCounting, startCountdown };
 };
-
 export default useCountdown;
