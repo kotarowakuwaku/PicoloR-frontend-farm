@@ -7,13 +7,18 @@ import { SubPageTitle } from "./components/SubTitle";
 import { ColorCircle } from "./components/ColorCircle";
 import Stopwatch from "./components/Stopwatch";
 import useCountdown from "./hooks/useCountdown";
+import useStopwatch from "./hooks/useStopwatch";
 
 export function GameHost() {
   const [modalVisible, setModalVisible] = useState(false);
+  const [stopwatchVisible, setStopwatchVisible] = useState(false);
   const { count, isCounting, startCountdown } = useCountdown(() => {
-    // カウントダウン完了時にモーダルを閉じる例
     setModalVisible(false);
+    setStopwatchVisible(true);
+    stopwatch.start();
   });
+
+  const stopwatch = useStopwatch();
 
   const mockResponse = {
     themeColors: ["#19ff00", "#ff007f", "#004cff"],
@@ -59,7 +64,7 @@ export function GameHost() {
           padding: "1vw ",
         })}
       >
-        <Stopwatch time={256} />
+        {stopwatchVisible && <Stopwatch time={stopwatch.time} />}
       </div>
     </div>
   );
