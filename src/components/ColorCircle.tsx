@@ -3,15 +3,21 @@ import { motion } from "framer-motion";
 
 interface ColorCircleProps {
   color: string;
-  delay: number; // 秒単位の遅延 (例: 0.3, 0.6, …)
+  delay: number;
+  onAnimationComplete?: () => void;
 }
 
-export const ColorCircle: React.FC<ColorCircleProps> = ({ color, delay }) => {
+export const ColorCircle: React.FC<ColorCircleProps> = ({
+  color,
+  delay,
+  onAnimationComplete,
+}) => {
   return (
     <motion.div
       initial={{ opacity: 0 }} // 初期状態
       animate={{ opacity: 1 }} // 目標状態
       transition={{ delay, duration: 0.5, ease: "easeInOut" }} // 遅延、アニメーションの長さ、イージング
+      onAnimationComplete={onAnimationComplete}
       style={{
         display: "flex",
         width: "20vw",
