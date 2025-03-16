@@ -5,15 +5,16 @@ import reactLogo from "./assets/react.svg";
 import { css } from "../styled-system/css";
 import { flex } from "../styled-system/patterns";
 import { useParams } from "react-router-dom";
-import  Button  from "./components/Button";
+import Button from "./components/Button";
 import { ButtonMode } from "./types/ButtonMode";
 import QRCode from "./components/qrcode";
+import BoxBorderedContainerWithTitle from "./components/BoxBorderedContainerWithTitle";
 
 
 export function Rooms() {
-  const { roomId } = useParams<{ roomId : string }>();
-  const [members, ] = useState<string[]>(["こた", "たいち", "ゆうか", "しょうま", "ああああああ", "jeofjeofjeofj"])
-  const [url, ] = useState<string>(`http://localhost:9000/PicoloR-frontend-farm/room/${roomId}`);
+  const { roomId } = useParams<{ roomId: string }>();
+  const [members,] = useState<string[]>(["こた", "たいち", "ゆうか", "しょうま", "ああああああ", "jeofjeofjeofj"])
+  const [url,] = useState<string>(`http://localhost:9000/PicoloR-frontend-farm/room/${roomId}`);
 
   return (
     <>
@@ -38,52 +39,42 @@ export function Rooms() {
             display: "flex",
             justify: "center",
             align: "center",
-            mt:"20px",
+            mt: "20px",
             w: "40%",
-            h:"100%"
+            h: "100%"
           })}>
             <QRCode url={url} />
           </div>
-          <div className={css({
-            border: "2px solid #2E2E2E",
-            borderRadius: "20px",
-            w: "40%",
-            h: "50vh"
-          })}>
-            <div className={flex({
-              display: "flex",
-              justify: "center",
-              fontSize: "1.5rem"
-            })}>参加者一覧</div>
-            {members && (
-              <div className={flex({
-                display: "flex",
-                justify: "center",
-                fontSize: "3rem"
-              })}>
-                {members.length}人
-              </div>
-            )}
-            <ul className={flex({
-              p: "5px 20px",
-              display: "flex",
-              flexWrap: "wrap",
-              listStyle: "none"
-            })}>
+          <BoxBorderedContainerWithTitle title="参加者一覧">
               {members && (
-                members.map((member) => (
-                  <li key={member} className={css({
-                    display: "inline",
-                    p: "5px 20px",
-                    fontSize: "1rem"
-                  })}>
-                    {member}
-                  </li>
-                ))
+                <div className={flex({
+                  display: "flex",
+                  justify: "center",
+                  fontSize: "3rem"
+                })}>
+                  {members.length}人
+                </div>
               )}
-            </ul>
+              <ul className={flex({
+                p: "5px 20px",
+                display: "flex",
+                flexWrap: "wrap",
+                listStyle: "none"
+              })}>
+                {members && (
+                  members.map((member) => (
+                    <li key={member} className={css({
+                      display: "inline",
+                      p: "5px 20px",
+                      fontSize: "1rem"
+                    })}>
+                      {member}
+                    </li>
+                  ))
+                )}
+              </ul>
+              </BoxBorderedContainerWithTitle>
           </div>
-        </div>
         <div className={flex({
           display: "flex",
           justify: "center",
@@ -92,7 +83,7 @@ export function Rooms() {
           w: "480px",
           h: "83px",
         })}>
-          <Button type={ButtonMode.DASHED} text="GAME START" />
+          <Button type={ButtonMode.GREEN} text="GAME START" />
         </div>
       </div>
     </>
