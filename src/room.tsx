@@ -5,6 +5,9 @@ import reactLogo from "./assets/react.svg";
 import { css } from "../styled-system/css";
 import { flex } from "../styled-system/patterns";
 import { useParams } from "react-router-dom";
+import  Button  from "./components/Button";
+import { ButtonMode } from "./types/ButtonMode";
+
 
 export function Rooms() {
   const { roomId } = useParams<{ roomId : string }>();
@@ -84,10 +87,10 @@ export function Rooms() {
           m: "0 auto",
           mt: "20px",
           w: "480px",
-          h: "80px",
+          h: "83px",
 
         })}>
-          <button type="button" className={css({ border: "1px solid black", w: "100%" })}>GAME START</button>
+          <Button type={ButtonMode.GREEN} text="GAME START" />
         </div>
       </div>
     </>
