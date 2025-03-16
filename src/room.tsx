@@ -47,8 +47,8 @@ export function Rooms() {
           </div>
           <div className={flex({
             width: "40%",
-})}>
-          <BoxBorderedContainerWithTitle title="参加者一覧">
+          })}>
+            <BoxBorderedContainerWithTitle title="参加者一覧">
               {members && (
                 <div className={flex({
                   display: "flex",
@@ -76,9 +76,9 @@ export function Rooms() {
                   ))
                 )}
               </ul>
-              </BoxBorderedContainerWithTitle>
-              </div>
+            </BoxBorderedContainerWithTitle>
           </div>
+        </div>
         <div className={flex({
           display: "flex",
           justify: "center",
