@@ -20,10 +20,11 @@ const Main: React.FC = () => {
   return (
     <div>
       <Header mode={HeaderMode.GREEN} />
-      <Button type="primary" onClick={handleClick}>
-        カウントダウン開始
-      </Button>
+
       <CountdownModal visible={isCounting} count={count} />
+      <Button type="primary" onClick={handleClick}>
+        カウントダウン
+      </Button>
     </div>
   );
 };

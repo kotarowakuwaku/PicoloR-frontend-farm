@@ -20,21 +20,20 @@ const CountdownModal: React.FC<CountdownModalProps> = ({ visible, count }) => {
           },
         }}
       >
-        <Modal
-          open={true}
-          footer={null}
-          closable={false}
-          title={null}
-          className={"custom-modal-content"}
-          background-color={"transparent"}
-        >
+        <Modal open={visible} footer={null} closable={false} title={null}>
           <div
             className={css({
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
               textAlign: "center",
-              fontSize: "240px",
+              fontSize: "15rem",
+              color: "transparent",
+              WebkitTextStroke: "0.7rem white",
+              fontFamily: "Oswald",
             })}
           >
-            {count > 0 ? count : ""}hoge
+            {count > 0 ? count : ""}
           </div>
         </Modal>
       </ConfigProvider>
