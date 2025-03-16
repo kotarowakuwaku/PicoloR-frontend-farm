@@ -7,11 +7,13 @@ import { flex } from "../styled-system/patterns";
 import { useParams } from "react-router-dom";
 import  Button  from "./components/Button";
 import { ButtonMode } from "./types/ButtonMode";
+import QRCode from "./components/qrcode";
 
 
 export function Rooms() {
   const { roomId } = useParams<{ roomId : string }>();
   const [members, ] = useState<string[]>(["こた", "たいち", "ゆうか", "しょうま", "ああああああ", "jeofjeofjeofj"])
+  const [url, ] = useState<string>(`http://localhost:9000/PicoloR-frontend-farm/room/${roomId}`);
 
   return (
     <>
@@ -32,14 +34,15 @@ export function Rooms() {
           justify: "center",
           mt: "25px"
         })}>
-          <div className={css({
-            w: "40%"
+          <div className={flex({
+            display: "flex",
+            justify: "center",
+            align: "center",
+            mt:"20px",
+            w: "40%",
+            h:"100%"
           })}>
-            <img src={reactLogo} alt=""
-              className={css({
-                w: "60%"
-              })}
-            />
+            <QRCode url={url} />
           </div>
           <div className={css({
             border: "2px solid #2E2E2E",
@@ -88,9 +91,8 @@ export function Rooms() {
           mt: "20px",
           w: "480px",
           h: "83px",
-
         })}>
-          <Button type={ButtonMode.GREEN} text="GAME START" />
+          <Button type={ButtonMode.DASHED} text="GAME START" />
         </div>
       </div>
     </>
