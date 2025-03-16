@@ -12,6 +12,18 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  font-family: "M PLUS 1p";
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: -100;
+  background-color: #f5f5f5;
+  background-image: url("https://www.transparenttextures.com/patterns/45-degree-fabric-light.png");
 }
 
 a {
@@ -61,7 +73,7 @@ button:focus-visible {
     background-color: #ffffff;
   }
   a:hover {
-    color: #9F1A8F;
+    color: #9f1a8f;
   }
   button {
     background-color: #f9f9f9;
