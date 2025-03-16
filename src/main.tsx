@@ -49,6 +49,29 @@ export function Main() {
         alignItems: "center",
       })}
     >
+      <img
+        src="/brash.svg"
+        alt=""
+        className={css({
+          position: "absolute",
+          mt: "-10dvh",
+          top: "30dvh",
+          right: "0",
+          h: "380px",
+          zIndex: "-1",
+        })}
+      />
+      <img
+        src="/palette.svg"
+        alt=""
+        className={css({
+          position: "absolute",
+          top: "0",
+          left: "0",
+          h: "380px",
+          zIndex: "-1",
+        })}
+      />
       <div
         className={css({
           display: "flex",
