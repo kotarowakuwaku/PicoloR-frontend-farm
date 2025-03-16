@@ -15,6 +15,7 @@
   "dependencies": {
     "@types/styled-components": "^5.1.34",
     "antd": "^5.24.3",
+    "antd-style": "^3.7.1",
     "gh-pages": "^6.3.0",
     "react": "18",
     "react-dom": "18",
