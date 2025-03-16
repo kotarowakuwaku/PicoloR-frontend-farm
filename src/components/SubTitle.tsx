@@ -12,9 +12,7 @@ export const SubPageTitle: React.FC<ThemeColorTitleProps> = ({ title }) => {
         display: "flex",
         width: "100vw",
         justifyContent: "center",
-        height: "70vh",
-
-        textAlign: "center",
+        marginBottom: "2rem",
         fontSize: "2rem",
       })}
     >
