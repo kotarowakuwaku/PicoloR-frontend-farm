@@ -1,25 +1,17 @@
 import React from "react";
-import { css } from "../../styled-system/css";
+import { motion } from "framer-motion";
 
 interface ColorCircleProps {
   color: string;
+  delay: number; // 秒単位の遅延 (例: 0.3, 0.6, …)
 }
 
-export const ColorCircle: React.FC<ColorCircleProps> = ({ color }) => {
-  console.log(css({ bg: color }));
+export const ColorCircle: React.FC<ColorCircleProps> = ({ color, delay }) => {
   return (
-    <div
-      //TODO(Taichi): パンダcssで適用する
-      // className={css({
-      //   display: "flex",
-      //   width: "100px",
-      //   height: "100px",
-      //   borderRadius: "50%",
-      //   backgroundColor: `[${color}]`,
-      //   boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.2)",
-      //   border: "1px solid ",
-
-      // })}
+    <motion.div
+      initial={{ opacity: 0 }} // 初期状態
+      animate={{ opacity: 1 }} // 目標状態
+      transition={{ delay, duration: 0.5, ease: "easeInOut" }} // 遅延、アニメーションの長さ、イージング
       style={{
         display: "flex",
         width: "20vw",
@@ -27,8 +19,7 @@ export const ColorCircle: React.FC<ColorCircleProps> = ({ color }) => {
         borderRadius: "50%",
         backgroundColor: color,
         boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.2)",
-        border: `1px solid ${color}`,
       }}
-    ></div>
+    />
   );
 };

@@ -20,14 +20,14 @@ export function GameHost() {
       <SubPageTitle title="THEME COLOR" />
       <div
         className={css({
-          display: "flex", // 横に羅列するためにflexを使用
+          display: "flex",
 
-          justifyContent: "space-between", // 中央揃え
-          padding: "0 15vw", // 左右に10vwのpaddingを設定
+          justifyContent: "space-between",
+          padding: "0 15vw",
         })}
       >
         {mockResponse.themeColors.map((color, index) => (
-          <ColorCircle key={index} color={color} />
+          <ColorCircle key={index} color={color} delay={index * 1.0} />
         ))}
       </div>
     </div>
