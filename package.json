@@ -6,7 +6,7 @@
     "prepare": "panda codegen",
     "dev": "concurrently \"farm start\" \"npx panda --watch\"",
     "start": "farm start",
-    "build": "farm build",
+    "build": "panda codegen && farm build",
     "preview": "farm preview",
     "clean": "farm clean",
     "predeploy": "npm run build",
