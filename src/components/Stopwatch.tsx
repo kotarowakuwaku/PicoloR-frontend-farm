@@ -5,6 +5,9 @@ interface StopwatchDisplayProps {
 }
 
 const Stopwatch: React.FC<StopwatchDisplayProps> = ({ time }) => {
+  const minutes = Math.floor(time / 60);
+  const seconds = time % 60;
+
   return (
     <div
       style={{
@@ -13,7 +16,7 @@ const Stopwatch: React.FC<StopwatchDisplayProps> = ({ time }) => {
         marginTop: "2rem",
       }}
     >
-      {time}s
+      {time >= 60 ? `${minutes}:${seconds}` : `${time}`}
     </div>
   );
 };
