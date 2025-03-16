@@ -15,7 +15,7 @@ const useStyle = createStyles(() => ({
     height: "auto",
     transition: "background-color 0.2s",
     "&:hover": {
-      backgroundColor: "var(--primary)",
+      backgroundColor: "var(--dark)",
     },
   },
 }));

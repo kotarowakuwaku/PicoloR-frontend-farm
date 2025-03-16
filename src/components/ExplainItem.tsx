@@ -40,7 +40,7 @@ const ExplainItem: React.FC<ExplainItemProps> = ({
         htmlFor={id}
         className={css({
           fontSize: "1.2rem",
-          color: "var(--primary)",
+          color: "var(--secondary)",
         })}
       >
         {text}
