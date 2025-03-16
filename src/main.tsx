@@ -1,6 +1,7 @@
 import { Button as AntButton, ConfigProvider } from "antd";
 import { css } from "../styled-system/css";
 import { createStyles } from "antd-style";
+import ExplainItem from "./components/ExplainItem";
 
 const useStyle = createStyles(() => ({
   homeButton: {
@@ -146,73 +147,31 @@ export function Main() {
           </h3>
           <ul
             className={css({
-              p: "1.2rem",
+              p: "1.2rem 4rem",
               mt: "-24px",
-              display: "flex",
-              direction: "row",
-              justifyContent: "center",
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
               alignItems: "center",
-              gap: "40px",
             })}
           >
-            <li
-              className={css({
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "10px",
-              })}
-            >
-              <img src="/devices.svg" alt="PCとスマホのイラスト" />
-              1. 人数分のスマホを登録
-            </li>
-            <li
-              className={css({
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "10px",
-              })}
-            >
-              <img
-                id="laptop_colors"
-                src="/laptop_colors.svg"
-                alt="PCにテーマカラーが表示されるイラスト"
-                className={css({
-                  h: "160px",
-                  transition: "transform 0.2s",
-                  "&:hover": {
-                    transform: "scale(1.2)",
-                  },
-                })}
-              />
-              <label
-                htmlFor="laptop_colors"
-                className={css({
-                  fontSize: "1.2rem",
-                  color: "var(--primary)",
-                })}
-              >
-                2. テーマカラーの発表！
-              </label>
-            </li>
-            <li
-              className={css({
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "10px",
-              })}
-            >
-              <img
-                src="/capture_color.svg"
-                alt="スマホでカラーを撮影するイラスト"
-              />
-              3. スマホでテーマ色の写真を撮影！
-            </li>
+            <ExplainItem
+              id="devices"
+              text="1. 人数分のスマホを登録"
+              iconPath="/devices.svg"
+              alt="PCとスマホのイラスト"
+            />
+            <ExplainItem
+              id="laptop_colors"
+              text="2. テーマカラーの発表！"
+              iconPath="/laptop_colors.svg"
+              alt="PCにテーマカラーが表示されるイラスト"
+            />
+            <ExplainItem
+              id="capture_color"
+              text="3. スマホでテーマ色の写真を撮影！"
+              iconPath="/capture_color.svg"
+              alt="スマホでカラーを撮影するイラスト"
+            />
           </ul>
         </div>
       </div>
