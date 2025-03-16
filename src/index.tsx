@@ -1,4 +1,4 @@
-import Main from "./main";
+import { Main } from "./main";
 import { createRoot } from "react-dom/client";
 import "../styled-system/styles.css";
 
