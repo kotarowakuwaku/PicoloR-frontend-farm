@@ -1,12 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Header from './components/Header'
 import { HeaderMode } from './types/HeaderMode'
 import Button from './components/Button'
 import { ButtonMode } from './types/ButtonMode'
 import { css } from '../styled-system/css'
 import { flex } from '../styled-system/patterns'
+import RankBar from './components/RankBar'
+import RankBarProps from './types/RankBar'
 
 export function Result() {
+    const [top3Players,] = useState<RankBarProps[]>([
+        { color: "#F32E2EAC", rank: 1, name: "こた", time: "1:23", imageURL: "/first_place.png" },
+        { color: "#135FF7AC", rank: 2, name: "yuka", time: "1:43", imageURL: "/second_place.png" },
+        { color: "#F38E30AC", rank: 3, name: "太一", time: "4:01", imageURL: "/third_place.png" },
+    ]);
     return (
         <>
             <Header mode={HeaderMode.GRAY} />
@@ -16,80 +23,37 @@ export function Result() {
                 display: "flex",
                 justify: "center",
             })}>
-                <ul className={flex({
-                    display: "flex",
-                    justify: "space-between",
-                    align: "center",
-                    bgColor: "white",
-                    w: "80%",
-                    h: "166px",
-                    borderRadius: "56px",
-
-                })}>
-                    <li >
-                        <ul className={flex({
-                            display: "flex",
-                            justify: "space-around",
-                            ml: "20px",
-                        })}>
-                            <li className={css({
-                                w: "70%",
-                            })}>
-                                <img src="/first_place.png" alt="" className={css({
-                                    w: "80%",
-                                })} />
-                            </li>
-                            <li className={flex({
-                                display: "flex",
-                                align: "center", // 上下中央寄せ
-                            })}>
-                                <span className={css({
-                                    fontSize: "2rem",
-                                })}>しょ</span>
-                            </li>
-                        </ul>
-                    </li>
-                    <li className={flex({
-                        w: "30%",
-                        display: "flex",
-                        justify: "space-between",
+                {top3Players && (
+                    <ul className={css({
+                        w: "80%",
                     })}>
-                        <ul className={flex({
-                            display: "flex",
-                            justify: "space-around",
-                            align: "center",
-                        })}>
-                            <li>
-                                <span className={css({
-                                    fontSize: "2rem",
-                                })}>0:59</span>
-                            </li>
+                        {top3Players.map((player) => (
                             <li className={css({
-                                w: "40%",
+                                m: "12px 0"
                             })}>
-                                <img src="/palette.svg" alt="" className={css({
-
-                                })} />
+                                <RankBar key={player.rank} {...player} />
                             </li>
-                        </ul>
-                    </li>
-                </ul>
-                {/* <div>
-                    <img src="/second_place.png" alt="" />
-                    <span>yuka</span>
-                    <span>1:43</span>
-                    <img src="" alt="" />
-                </div>
-                <div>
-                    <img src="/third_place.png" alt="" />
-                    <span>太一</span>
-                    <span>4:01</span>
-                    <img src="" alt="" />
-                </div> */}
+                        ))}
+                    </ul>
+                )}
             </div>
-            <div>
-                <Button type={ButtonMode.GREEN} text="もう一度遊ぶ" />
-                <Button type={ButtonMode.GRAY} text="HOMEへ戻る" />
+            <div className={flex({
+                display: "flex",
+                justify: "space-around",
+                mt: "20px",
+            })}>
+                <div className={css({
+                    w:"40%",
+                    ml:"50px"
+                })}>
+                    <Button type={ButtonMode.GREEN} text="もう一度遊ぶ" />
+                </div>
+                <div className={css({
+                    w:"40%",
+                    mr:"50px"
+                })}>
+                    <Button type={ButtonMode.GRAY} text="HOMEへ戻る" />
+                </div>
             </div>
         </>
     )
