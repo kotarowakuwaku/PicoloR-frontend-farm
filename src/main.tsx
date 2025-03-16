@@ -2,6 +2,7 @@ import { Button as AntButton, ConfigProvider } from "antd";
 import { css } from "../styled-system/css";
 import { createStyles } from "antd-style";
 import ExplainItem from "./components/ExplainItem";
+import BoxBorderedContainerWithTitle from "./components/BoxBorderedContainerWithTitle";
 
 const useStyle = createStyles(() => ({
   homeButton: {
@@ -133,96 +134,36 @@ export function Main() {
           START
         </AntButton>
       </ConfigProvider>
-      <div
-        className={css({
-          position: "relative",
-          mt: "1rem",
-          h: "fit-content",
-          w: "100%",
-        })}
-      >
-        <div
+      <BoxBorderedContainerWithTitle title="遊び方">
+        <ul
           className={css({
-            position: "absolute",
-            top: "0",
-            left: "0",
-            h: "100%",
-            w: "100%",
-            zIndex: "-1",
+            p: "0 2.8rem",
+            mt: "-24px",
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr 1fr",
+            alignItems: "center",
           })}
         >
-          <div
-            className={css({
-              position: "absolute",
-              top: "0",
-              left: "0",
-              pt: "1rem",
-              h: "100%",
-              w: "100%",
-              bg: "#f5f5f5",
-              border: "3px solid #2d2d2d",
-              borderRadius: "20px",
-            })}
+          <ExplainItem
+            id="devices"
+            text="1. 人数分のスマホを登録"
+            iconPath="/devices.svg"
+            alt="PCとスマホのイラスト"
           />
-        </div>
-        <div
-          className={css({
-            mt: "2rem",
-          })}
-        >
-          <h3
-            className={css({
-              position: "absolute",
-              top: "0",
-              left: "0",
-              right: "0",
-              transform: "translateY(-50%)",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            })}
-          >
-            <span
-              className={css({
-                fontSize: "2rem",
-                w: "fit-content",
-                bg: "#f5f5f5",
-                p: "0 1.5rem",
-              })}
-            >
-              遊び方
-            </span>
-          </h3>
-          <ul
-            className={css({
-              p: "1.2rem 4rem",
-              mt: "-24px",
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr 1fr",
-              alignItems: "center",
-            })}
-          >
-            <ExplainItem
-              id="devices"
-              text="1. 人数分のスマホを登録"
-              iconPath="/devices.svg"
-              alt="PCとスマホのイラスト"
-            />
-            <ExplainItem
-              id="laptop_colors"
-              text="2. テーマカラーの発表！"
-              iconPath="/laptop_colors.svg"
-              alt="PCにテーマカラーが表示されるイラスト"
-            />
-            <ExplainItem
-              id="capture_color"
-              text="3. スマホでテーマ色の写真を撮影！"
-              iconPath="/capture_color.svg"
-              alt="スマホでカラーを撮影するイラスト"
-            />
-          </ul>
-        </div>
-      </div>
+          <ExplainItem
+            id="laptop_colors"
+            text="2. テーマカラーの発表！"
+            iconPath="/laptop_colors.svg"
+            alt="PCにテーマカラーが表示されるイラスト"
+          />
+          <ExplainItem
+            id="capture_color"
+            text="3. スマホでテーマ色の写真を撮影！"
+            iconPath="/capture_color.svg"
+            alt="スマホでカラーを撮影するイラスト"
+          />
+        </ul>
+      </BoxBorderedContainerWithTitle>
     </main>
   );
 }
