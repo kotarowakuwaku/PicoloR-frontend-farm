@@ -23,6 +23,8 @@ const useStyle = createStyles(() => ({
 export function Main() {
   const { styles } = useStyle();
 
+  const subTitle = "色を探せ！ひらめきカラースナップ対決！";
+
   return (
     <main
       className={css({
@@ -45,12 +47,25 @@ export function Main() {
       >
         <h2
           className={css({
-            fontFamily: "Londrina Solid",
             fontSize: "2.6rem",
             fontWeight: "bold",
           })}
         >
-          色を探せ！ひらめきカラースナップ対決！
+          {subTitle.split("").map((char, index) => (
+            <span
+              key={index}
+              className={css({
+                display: "inline-block",
+                transition: "transform 0.3s",
+                transform: "translateY(0)",
+                "&:hover": {
+                  transform: "translateY(-10px)",
+                },
+              })}
+            >
+              {char}
+            </span>
+          ))}
         </h2>
         <h1>
           <img
@@ -112,6 +127,7 @@ export function Main() {
               pt: "1rem",
               h: "100%",
               w: "100%",
+              bg: "#f5f5f5",
               border: "3px solid #2d2d2d",
               borderRadius: "20px",
             })}
