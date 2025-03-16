@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import { css } from "../styled-system/css";
+import { HeaderMode } from "./types/HeaderMode";
+import Header from "./components/Header";
+import CountDownModal from "./components/CountdownModal";
 import { SubPageTitle } from "./components/SubTitle";
 import { ColorCircle } from "./components/ColorCircle";
-import { css } from "../styled-system/css";
-import Header from "./components/Header";
-import { HeaderMode } from "./types/HeaderMode";
-import CountDownModal from "./components/CountdownModal";
+import Stopwatch from "./components/Stopwatch";
 import useCountdown from "./hooks/useCountdown";
 
 export function GameHost() {
@@ -53,6 +54,13 @@ export function GameHost() {
         ))}
       </div>
       {modalVisible && <CountDownModal visible={true} count={count} />}
+      <div
+        className={css({
+          padding: "1vw ",
+        })}
+      >
+        <Stopwatch time={256} />
+      </div>
     </div>
   );
 }
