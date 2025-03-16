@@ -4,7 +4,7 @@
   "homepage": "https://kotarowakuwaku.github.io/PicoloR-frontend-farm/",
   "scripts": {
     "prepare": "panda codegen",
-    "dev": "farm start",
+    "dev": "concurrently \"farm start\" \"npx panda --watch\"",
     "start": "farm start",
     "build": "farm build",
     "preview": "farm preview",
