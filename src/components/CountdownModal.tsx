@@ -7,9 +7,9 @@ interface CountdownModalProps {
 }
 
 const CountdownModal: React.FC<CountdownModalProps> = ({ visible, count }) => (
-  <Modal visible={visible} title="カウントダウン" footer={null}>
+  <Modal open={visible} title="カウントダウン" footer={null}>
     <div style={{ textAlign: "center", fontSize: "24px" }}>
-      {count > 0 ? count : "終了しました"}
+      {count > 0 ? count : ""}
     </div>
   </Modal>
 );
