@@ -45,7 +45,10 @@ export function Rooms() {
           })}>
             <QRCode url={url} />
           </div>
-          <BoxBorderedContainerWithTitle title="参加者一覧">
+          <div className={flex({
+            width: "40%",
+          })}>
+            <BoxBorderedContainerWithTitle title="参加者一覧">
               {members && (
                 <div className={flex({
                   display: "flex",
@@ -73,8 +76,9 @@ export function Rooms() {
                   ))
                 )}
               </ul>
-              </BoxBorderedContainerWithTitle>
+            </BoxBorderedContainerWithTitle>
           </div>
+        </div>
         <div className={flex({
           display: "flex",
           justify: "center",
