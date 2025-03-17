@@ -61,28 +61,6 @@ function ControllerPlayingWaiting() {
           />
         </ul>
       </BoxBorderedContainerWithTitle>
-      <div
-        className={css({
-          h: "3rem",
-          position: "fixed",
-          bottom: "10px",
-          left: "10px",
-          right: "10px",
-        })}
-      >
-        <div
-          className={css({
-            w: "full",
-            p: "6px",
-            bg: "white",
-            fontSize: "1.5rem",
-            textAlign: "center",
-            borderRadius: "10px",
-          })}
-        >
-          yuka
-        </div>
-      </div>
     </div>
   );
 }
