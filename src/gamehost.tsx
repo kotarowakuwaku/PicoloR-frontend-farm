@@ -21,10 +21,10 @@ export function GameHost() {
 
   const stopwatch = useStopwatch();
 
-  const mockResponse = [
+  const mockResponse: any[] = [
     { themeColor: "#19ff00", imageURL: "aaa.png", rank: 2 },
-    { themeColor: "#ff007f", imageURL: "bbb.png", rank: 1 },
     { themeColor: "#004cff", imageURL: "bbb.png", rank: 3 },
+    { themeColor: "#ff007f", imageURL: "bbb.png", rank: 1 },
   ];
   const mockColor = [
     { themeColor: "#19ff00" },
@@ -64,6 +64,10 @@ export function GameHost() {
               mockResponse?.find((item) => item.themeColor === themeColor)
                 ?.imageURL || ""
             }
+            rank={
+              mockResponse?.find((item) => item.themeColor === themeColor)
+                ?.rank || 0
+            }
             onAnimationComplete={
               index === 2 ? () => setModalVisible(true) : undefined
             }
@@ -81,3 +85,4 @@ export function GameHost() {
     </div>
   );
 }
+
