@@ -14,6 +14,8 @@ function ControllerPlayingPlaying() {
   const userID = url.searchParams.get("userID");
   const userIDNum = Number(userID);
 
+  const color = "#ff0000";
+
   const handleImageChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -157,14 +159,37 @@ function ControllerPlayingPlaying() {
           </label>
         </div>
       ) : (
-        <img
+        <div
           className={css({
-            h: "60dvh",
-            opacity: isJudging ? "0.5" : "1",
+            position: "relative",
+            display: "inline-block",
+            w: "fit-content",
+            h: "fit-content",
+            overflow: "hidden",
           })}
-          src={inputFileString}
-          alt="入力画像"
-        />
+        >
+          <img
+            className={css({
+              h: "60dvh",
+              opacity: isJudging ? "0.5" : "1",
+              display: "block",
+            })}
+            src={inputFileString}
+            alt="入力画像"
+          />
+          <div
+            className={css({
+              position: "absolute",
+              bottom: "0",
+              left: "0",
+              right: "0",
+              h: "100%",
+              w: "100%",
+              background: `linear-gradient(to bottom, transparent 20%, ${color} 50%, transparent 80%)`,
+              animation: "radar-scan 4s linear infinite",
+            })}
+          />
+        </div>
       )}
     </Form>
   );
