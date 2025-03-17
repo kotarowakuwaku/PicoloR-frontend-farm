@@ -9,18 +9,8 @@ interface ColorCircleProps {
   rank?: number;
   onAnimationComplete?: () => void;
 }
+const TestImage = "/test.png";
 
-const res_mockWebsocketData_pthoto = {
-  action: "photo_submitted",
-  roomID: "int",
-  posts: [
-    {
-      rank: "int",
-      userName: "string",
-      color: "string",
-    },
-  ],
-};
 export const ColorCircle: React.FC<ColorCircleProps> = ({
   color,
   delay,
@@ -41,7 +31,7 @@ export const ColorCircle: React.FC<ColorCircleProps> = ({
         return "";
     }
   };
-
+  imageURL = TestImage;
   return (
     <div style={{ position: "relative", width: "20vw", height: "20vw" }}>
       <img
@@ -51,7 +41,7 @@ export const ColorCircle: React.FC<ColorCircleProps> = ({
           w: "50%",
           h: "40%",
           position: "absolute",
-          transform: "rotate(40deg)", // 画像を45度右に傾ける
+          transform: "rotate(40deg)",
           float: "right",
           top: "-15%",
           right: "-15%",
@@ -59,16 +49,33 @@ export const ColorCircle: React.FC<ColorCircleProps> = ({
         })}
       />
       {imageURL ? (
-        <div
-          style={{
-            display: "flex",
-            width: "20vw",
-            height: "20vw",
-            borderRadius: "20%",
-            backgroundColor: color,
-            boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.2)",
-          }}
-        ></div>
+        <div style={{ position: "relative", width: "20vw", height: "20vw" }}>
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              borderRadius: "20%",
+              backgroundColor: color,
+              boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.2)",
+            }}
+          ></div>
+          <img
+            src="/test.png"
+            alt="Test Image"
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              display: "block",
+              width: "60%",
+              height: "80%",
+            }}
+          />
+        </div>
       ) : (
         <motion.div
           initial={{ opacity: 0 }} // 初期状態
