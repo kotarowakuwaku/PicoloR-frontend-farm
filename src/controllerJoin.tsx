@@ -44,26 +44,42 @@ export function ControllerJoin() {
   const roomIDNum = Number(roomID);
 
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-    const postMember = async () => {
-      console.log("postするぞ！");
-      fetch("https://picolor-backend-go.onrender.com/controller/room", {
-        method: "POST",
-        body: JSON.stringify({
-          roomID: roomIDNum,
-          userName: values.username,
-        }),
-      })
-        .then(async (res) => {
-          const data = await res.json();
-          const userID = data.userID;
-          console.log(userID);
-          window.location.href = `/controller/?roomID=${roomID}&userID=${userID}`;
-        })
-        .catch((err) => {
-          throw new Error(err);
+    async function createUserAndRoom() {
+      try {
+        const userRes = await fetch("https://picolor-backend-go.onrender.com/controller/user", {
+          method: "POST",
+          body: JSON.stringify({
+            userName: values.username,
+          }),
         });
-    };
-    postMember();
+    
+        if (!userRes.ok) {
+          throw new Error(`HTTP error! status: ${userRes.status}`);
+        }
+    
+        const userData = await userRes.json();
+        const userID = userData.userID; // ここで取得
+        console.log(userID);
+    
+        const joinRoomRes = await fetch("https://picolor-backend-go.onrender.com/controller/room", {
+          method: "POST",
+          body: JSON.stringify({
+            roomID: roomIDNum,
+            userID: userID,
+          }),
+        });
+    
+        if (!joinRoomRes.ok) {
+          throw new Error(`HTTP error! status: ${joinRoomRes.status}`);
+        }
+    
+        window.location.href = `/controller/?roomID=${roomID}&userID=${userID}`;
+      } catch (err) {
+        console.error("エラー:", err);
+      }
+    }
+    
+    createUserAndRoom();
   };
 
   return (

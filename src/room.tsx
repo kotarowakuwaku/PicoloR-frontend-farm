@@ -13,7 +13,10 @@ import { supabase } from "./supabase/supabase";
 export function Rooms() {
   const { roomId } = useParams<{ roomId: string }>();
   const [members, setMembers] = useState<string[]>([]);
-  const [url] = useState<string>(`http://localhost:9000/PicoloR-frontend-farm/controller/join?roomID=${roomId}`);
+  const currentBaseURL = window.location.origin;
+  console.log(currentBaseURL);
+
+  const [url] = useState<string>(`${currentBaseURL}/PicoloR-frontend-farm/controller/join?roomID=${roomId}`);
 
   useEffect(() => {
     const channel = supabase
@@ -40,7 +43,7 @@ export function Rooms() {
               if (error) {
                 console.error(error);
               } else if (newMember) {
-                setMembers([...members, newMember.name]);
+                setMembers((prevMembers) => [...prevMembers, newMember.name]);
               }
             }
           }
