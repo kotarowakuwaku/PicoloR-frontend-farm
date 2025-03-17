@@ -14,9 +14,35 @@ export function Rooms() {
   const { roomId } = useParams<{ roomId: string }>();
   const [members, setMembers] = useState<string[]>([]);
   const currentBaseURL = window.location.origin;
-  console.log(currentBaseURL);
 
   const [url] = useState<string>(`${currentBaseURL}/PicoloR-frontend-farm/controller/join?roomID=${roomId}`);
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      const { data: members, error } = await supabase
+        .from("room_members")
+        .select("user_id")
+        .eq("room_id", roomId)
+      if (error) {
+        console.error(error);
+      } else if (members) {
+        const userIds = members.map((member) => member.user_id);
+        const { data: users, error } = await supabase
+          .from("users")
+          .select("name")
+          .in("id", userIds);
+        if (error) {
+          console.error(error);
+        } else if (users) {
+          const memberNames = users.map((user) => user.name);
+          setMembers(memberNames);
+        }
+      }
+    };
+
+    fetchMembers();
+  }
+  , [roomId]);
 
   useEffect(() => {
     const channel = supabase
@@ -38,8 +64,6 @@ export function Rooms() {
                 .select("name")
                 .eq("id", payload.new.user_id)
                 .single()
-
-                console.log(newMember);
               if (error) {
                 console.error(error);
               } else if (newMember) {
