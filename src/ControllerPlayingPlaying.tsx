@@ -8,6 +8,12 @@ function ControllerPlayingPlaying() {
   const [inputFileString, setInputFileString] = useState<string | null>(null);
   const [inputFile, setInputFile] = useState<File | null>(null);
 
+  const url = new URL(window.location.href);
+  const roomID = url.searchParams.get("roomID");
+  const roomIDNum = Number(roomID);
+  const userID = url.searchParams.get("userID");
+  const userIDNum = Number(userID);
+
   const handleImageChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -18,10 +24,48 @@ function ControllerPlayingPlaying() {
     setInputFileString(URL.createObjectURL(file));
     setIsJudging(true);
 
-    // 50秒後に画像を削除
-    setTimeout(() => {
-      setIsJudging(false);
-    }, 1000);
+    console.log("file", file);
+    // fileをbase64に変換
+    const base64Image = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        if (typeof reader.result !== "string") {
+          reject(new Error("reader.result is not string"));
+          return;
+        }
+        resolve(reader.result);
+      };
+      reader.onerror = () => {
+        reject(reader.error);
+      };
+    });
+
+    // data:image/png;base64,を削除
+    const base64ImageString = base64Image.split(",")[1];
+
+    console.log("今からpost!", base64ImageString);
+    const res = await fetch(
+      "https://picolor-backend-python.onrender.com/controller/image",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          userID: userIDNum,
+          colorID: 10,
+          image: base64ImageString,
+        }),
+      }
+    )
+      .then(async (res) => {
+        return await res.json();
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+
+    setIsJudging(false);
+
+    console.log(res);
   };
 
   useEffect(() => {
