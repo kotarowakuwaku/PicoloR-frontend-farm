@@ -8,6 +8,7 @@ import { ColorCircle } from "./components/ColorCircle";
 import Stopwatch from "./components/Stopwatch";
 import useCountdown from "./hooks/useCountdown";
 import useStopwatch from "./hooks/useStopwatch";
+import { image, radialGradient } from "framer-motion/client";
 
 export function GameHost() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -20,9 +21,16 @@ export function GameHost() {
 
   const stopwatch = useStopwatch();
 
-  const mockResponse = {
-    themeColors: ["#19ff00", "#ff007f", "#004cff"],
-  };
+  const mockResponse = [
+    { themeColor: "#19ff00", imageURL: "aaa.png", rank: 2 },
+    { themeColor: "#ff007f", imageURL: "bbb.png", rank: 1 },
+    { themeColor: "#004cff", imageURL: "bbb.png", rank: 3 },
+  ];
+  const mockColor = [
+    { themeColor: "#19ff00" },
+    { themeColor: "#ff007f" },
+    { themeColor: "#004cff" },
+  ];
 
   // モーダルが表示されたらカウントダウンを開始
   useEffect(() => {
@@ -47,11 +55,15 @@ export function GameHost() {
           padding: "0 15vw",
         })}
       >
-        {mockResponse.themeColors.map((color, index) => (
+        {mockColor.map(({ themeColor }, index) => (
           <ColorCircle
             key={index}
-            color={color}
+            color={themeColor}
             delay={index * 1.0}
+            imageURL={
+              mockResponse?.find((item) => item.themeColor === themeColor)
+                ?.imageURL || ""
+            }
             onAnimationComplete={
               index === 2 ? () => setModalVisible(true) : undefined
             }
