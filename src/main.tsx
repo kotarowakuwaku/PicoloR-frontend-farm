@@ -25,17 +25,20 @@ export function Main() {
   const { styles } = useStyle();
 
   const subTitle = "色を探せ！ひらめきカラースナップ対決！";
+
   const onClickStart = async () => {
-    // TODO: ここでAPIを叩いて部屋を作成する
-    // apiを叩く
-    // (代わりに一旦時間待つ)
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // /host/room
-    const res = { roomID: 12345 };
-
-    // /room/:roomIDに移動
-    window.location.href = `/room/${res.roomID}`;
+    fetch("https://picolor-backend-go.onrender.com/host/room", {
+      method: "POST",
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        const roomID = data.roomID;
+        console.log(roomID);
+        window.location.href = `/PicoloR-frontend-farm/room/${roomID}`;
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
   };
 
   return (
