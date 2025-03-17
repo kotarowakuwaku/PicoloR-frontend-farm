@@ -20,9 +20,6 @@ export function Result() {
                     `https://picolor-backend-go.onrender.com/host/result?roomID=${roomId}`,
                     {
                         method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
                     }
                 );
                 if (!response.ok) {
@@ -32,6 +29,10 @@ export function Result() {
                 setTop3players(resultData.results.map((result: { Rank: number; UserName: string; PostedTime: string; Image: string; Color: string }) => {
                     const { Image, ...rest } = result;
                     const decoededImage = `data:image/jpeg;base64,${Image}`;
+                    console.log({
+                        ...rest,
+                        Image: decoededImage,
+                    })
                     return {
                         ...rest,
                         Image: decoededImage,
@@ -77,9 +78,6 @@ export function Result() {
                     `https://picolor-backend-go.onrender.com/host/room`,
                     {
                         method: "DELETE",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
                         body: JSON.stringify({ roomID: Number(roomId) }),
                     }
                 );
