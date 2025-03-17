@@ -11,11 +11,7 @@ import { useParams } from "react-router-dom"
 
 export function Result() {
     const { roomId } = useParams<{ roomId: string }>();
-    const [top3Players, setTop3players] = useState<RankBarProps[]>([
-        { color: "#F32E2EAC", rank: 1, name: "こた", time: "1:23", imageURL: "/first_place.png" },
-        { color: "#135FF7AC", rank: 2, name: "yuka", time: "1:43", imageURL: "/second_place.png" },
-        { color: "#F38E30AC", rank: 3, name: "太一", time: "4:01", imageURL: "/third_place.png" },
-    ]);
+    const [top3Players, setTop3players] = useState<RankBarProps[]>([]);
 
     useEffect(() => {
         const fetchResultData = async () => {
@@ -33,23 +29,73 @@ export function Result() {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const resultData = await response.json();
-                console.log(resultData);
-                setTop3players(resultData.results.map((result: { Rank: number; UserName: string; PostedTime: string; Image: string })=>{
+                setTop3players(resultData.results.map((result: { Rank: number; UserName: string; PostedTime: string; Image: string; Color: string }) => {
+                    const { Image, ...rest } = result;
+                    const decoededImage = `data:image/jpeg;base64,${Image}`;
                     return {
-                        rank: result.Rank,
-                        name: result.UserName,
-                        time: result.PostedTime,
-                        imageURL: `data:image/jpeg;base64,${result.Image}`,
-                        color: "#F32E2EAC"
+                        ...rest,
+                        Image: decoededImage,
                     }
                 }))
             } catch (err) {
                 console.error("Fetch error:", err);
             }
         }
-        
+
         fetchResultData();
-    }, [roomId]); // roomIdを依存配列に追加
+    }, [roomId]);
+
+    const onCliclkRetry = () => {
+        const resetColorAndUser = async () => {
+            try {
+                const response = await fetch(
+                    `https://picolor-backend-go.onrender.com/host/room/reset`,
+                    {
+                        method: "DELETE",
+                        body: JSON.stringify({ roomID: Number(roomId) }),
+                    }
+                    //TODO CORSエラーが出るので、しょーまに確認
+                );
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+            } catch (err) {
+                console.error("Fetch error:", err);
+            } finally {
+                // 遷移先
+                // window.location.href = `/PicoloR-frontend-farm/room/${roomId}`;
+            }
+
+        }
+
+        resetColorAndUser();
+    }
+    const onClickHome = () => {
+        const deleteRoom = async () => {
+            try {
+                const response = await fetch(
+                    `https://picolor-backend-go.onrender.com/host/room`,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ roomID: Number(roomId) }),
+                    }
+                );
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+            } catch (err) {
+                console.error("Fetch error:", err);
+            } finally {
+                // 遷移先
+                // window.location.href = `/PicoloR-frontend-farm/`;
+            }
+        }
+
+        deleteRoom();
+    }
 
     return (
         <>
@@ -68,7 +114,7 @@ export function Result() {
                             <li className={css({
                                 m: "12px 0"
                             })}>
-                                <RankBar key={player.rank} {...player} />
+                                <RankBar key={player.Rank} {...player} />
                             </li>
                         ))}
                     </ul>
@@ -83,13 +129,13 @@ export function Result() {
                     w: "40%",
                     ml: "50px"
                 })}>
-                    <Button type={ButtonMode.GREEN} text="もう一度遊ぶ" />
+                    <Button type={ButtonMode.GREEN} text="もう一度遊ぶ" onClick={onCliclkRetry} />
                 </div>
                 <div className={css({
                     w: "40%",
                     mr: "50px"
                 })}>
-                    <Button type={ButtonMode.GRAY} text="HOMEへ戻る" />
+                    <Button type={ButtonMode.GRAY} text="HOMEへ戻る" onClick={onClickHome} />
                 </div>
             </div>
         </>
