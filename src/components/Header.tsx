@@ -16,7 +16,7 @@ const Header: React.FC<HeaderProps> = ({ mode }) => {
 
         .header {
           font-size: 4rem;
-          margin: 1rem;
+          padding: 1rem;
           position: absolute;
           top: 0;
           left: 0;

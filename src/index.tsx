@@ -6,6 +6,7 @@ import { GameHost } from "./gamehost"; // 新しく作成したTestコンポー�
 import { Result } from "./result";
 import "./index.css";
 import "../styled-system/styles.css";
+import { ControllerJoin } from "./controllerJoin";
 
 const container = document.querySelector("#root") as Element;
 const root = createRoot(container);
@@ -14,16 +15,18 @@ root.render(
   <BrowserRouter>
     <Routes>
       <Route path="PicoloR-frontend-farm/" element={<Main />} />
+
+
+      <Route path="PicoloR-frontend-farm/room/:roomId" element={<Rooms />} />
       <Route
-        path="PicoloR-frontend-farm/room/:roomId"
-        element={<Rooms />}
-      />{" "}
-      {/* 新しいページ */}
-      <Route
-        path="PicoloR-frontend-farm/room/:roomId/hostUser"
-        element={<GameHost />}
+        path="PicoloR-frontend-farm/controller/join"
+        element={<ControllerJoin />}
+
       />
       <Route path="PicoloR-frontend-farm/result/:roomId" element={<Result />} />
+      <Route
+        path="PicoloR-frontend-farm/room/:roomId/hostUser"
+        element={<GameHost />}/>
     </Routes>
   </BrowserRouter>
 );
