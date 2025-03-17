@@ -17,7 +17,6 @@ const useStyle = createStyles(() => ({
     borderRadius: "10px",
     border: "2px solid var(--secondary)",
     padding: "10px",
-    marginBottom: "40px",
     fontSize: "1.5rem",
     textAlign: "center",
     fontFamily: "M PLUS 1p",
@@ -39,9 +38,32 @@ const useStyle = createStyles(() => ({
 
 export function ControllerJoin() {
   const { styles } = useStyle();
+  // クエリパラメータを取得
+  const url = new URL(window.location.href);
+  const roomID = url.searchParams.get("roomID");
+  const roomIDNum = Number(roomID);
 
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-    console.log("Success:", values);
+    const postMember = async () => {
+      console.log("postするぞ！");
+      fetch("https://picolor-backend-go.onrender.com/controller/room", {
+        method: "POST",
+        body: JSON.stringify({
+          roomID: roomIDNum,
+          userName: values.username,
+        }),
+      })
+        .then(async (res) => {
+          const data = await res.json();
+          const userID = data.userID;
+          console.log(userID);
+          window.location.href = `/controller/?roomID=${roomID}&userID=${userID}`;
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+    };
+    postMember();
   };
 
   return (
@@ -91,6 +113,7 @@ export function ControllerJoin() {
               type="primary"
               htmlType="submit"
               style={{
+                marginTop: "40px",
                 fontSize: "1.5rem",
                 width: "100%",
                 textAlign: "center",
