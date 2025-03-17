@@ -4,14 +4,14 @@ import { css } from '../../styled-system/css'
 import RankBarProps from '../types/RankBar'
 
 const RankBar: React.FC<RankBarProps> = ({
-    color,
-    rank,
-    name,
-    time,
+    Color,
+    Rank,
+    UserName,
+    PostedTime,
     imageURL,
 }) => {
     const rankImage = () => {
-        switch (rank) {
+        switch (Rank) {
             case 1:
                 return "/first_place.png"
             case 2:
@@ -34,7 +34,7 @@ const RankBar: React.FC<RankBarProps> = ({
                 borderRadius: "56px",
             })}
                 style={{
-                    backgroundColor: color
+                    backgroundColor: Color
                 }}>
                 <li >
                     <ul className={flex({
@@ -55,7 +55,7 @@ const RankBar: React.FC<RankBarProps> = ({
                         })}>
                             <span className={css({
                                 fontSize: "2rem",
-                            })}>{name}</span>
+                            })}>{UserName}</span>
                         </li>
                     </ul>
                 </li>
@@ -72,7 +72,7 @@ const RankBar: React.FC<RankBarProps> = ({
                         <li>
                             <span className={css({
                                 fontSize: "2rem",
-                            })}>{time}</span>
+                            })}>{PostedTime}</span>
                         </li>
                         <li className={css({
                             w: "40%",
