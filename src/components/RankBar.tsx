@@ -1,7 +1,7 @@
 import React from 'react'
 import { flex } from '../../styled-system/patterns/flex'
 import { css } from '../../styled-system/css'
-import  RankBarProps  from '../types/RankBar'
+import RankBarProps from '../types/RankBar'
 
 const RankBar: React.FC<RankBarProps> = ({
     color,
@@ -76,10 +76,12 @@ const RankBar: React.FC<RankBarProps> = ({
                         </li>
                         <li className={css({
                             w: "40%",
+                            transition: "transform 0.2s ease-in-out", // アニメーションを追加
+                            "&:hover": {
+                                transform: "scale(2)", // ホバー時に1.2倍に拡大
+                            }
                         })}>
-                            <img src={imageURL} alt="" className={css({
-
-                            })} />
+                            <img src={imageURL} alt="" />
                         </li>
                     </ul>
                 </li>
