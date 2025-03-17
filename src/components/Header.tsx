@@ -16,7 +16,7 @@ const Header: React.FC<HeaderProps> = ({ mode }) => {
 
         .header {
           font-size: 4rem;
-          padding: 1rem;
+          padding: 0 1rem;
           position: absolute;
           top: 0;
           left: 0;
@@ -34,12 +34,17 @@ const Header: React.FC<HeaderProps> = ({ mode }) => {
         .header .colored-text {
           position: absolute;
           top: -4px;
-          left: -4px;
+          left: 12px;
+          text-shadow: 
+            -2px -2px 0 #2E2E2E, 
+             2px -2px 0 #2E2E2E, 
+            -2px  2px 0 #2E2E2E, 
+             2px  2px 0 #2E2E2E;
         }
 
         /* 緑パターン */
         .header.green .colored-text {
-          color: #00b050;
+          color: #0AC74F;
         }
 
         /* グレーパターン */
@@ -49,8 +54,8 @@ const Header: React.FC<HeaderProps> = ({ mode }) => {
       `}</style>
 
       <h1 className={`header ${modeClass}`}>
-        <span className="black-text">PiColor</span>
-        <span className="colored-text">PiColor</span>
+        <span className="black-text">PiColoR</span>
+        <span className="colored-text">PiColoR</span>
       </h1>
     </>
   );
