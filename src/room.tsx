@@ -13,7 +13,7 @@ import { supabase } from "./supabase/supabase";
 export function Rooms() {
   const { roomId } = useParams<{ roomId: string }>();
   const [members, setMembers] = useState<string[]>([]);
-  const [url] = useState<string>(`http://localhost:9000/PicoloR-frontend-farm/room/${roomId}`);
+  const [url] = useState<string>(`http://localhost:9000/PicoloR-frontend-farm/controller/join?roomID=${roomId}`);
 
   useEffect(() => {
     const channel = supabase
