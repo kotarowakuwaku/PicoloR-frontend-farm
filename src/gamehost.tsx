@@ -8,7 +8,7 @@ import { ColorCircle } from "./components/ColorCircle";
 import Stopwatch from "./components/Stopwatch";
 import useCountdown from "./hooks/useCountdown";
 import useStopwatch from "./hooks/useStopwatch";
-import { image, radialGradient } from "framer-motion/client";
+import { supabase } from "./supabase/supabase";
 
 export function GameHost() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -21,10 +21,17 @@ export function GameHost() {
 
   const stopwatch = useStopwatch();
 
+  //postedtimeとusernameがほしい
   const mockResponse: any[] = [
-    { themeColor: "#19ff00", imageURL: "aaa.png", rank: 2 },
-    { themeColor: "#004cff", imageURL: "bbb.png", rank: 3 },
-    { themeColor: "#ff007f", imageURL: "bbb.png", rank: 1 },
+    {
+      themeColor: "#19ff00",
+      imageURL: "aaa.png",
+      rank: 2,
+      postedtime: 45,
+      userid: 15,
+    },
+    // { themeColor: "#004cff", imageURL: "bbb.png", rank: 3 },
+    // { themeColor: "#ff007f", imageURL: "bbb.png", rank: 1 },
   ];
   const mockColor = [
     { themeColor: "#19ff00" },
@@ -32,12 +39,33 @@ export function GameHost() {
     { themeColor: "#004cff" },
   ];
 
-  // モーダルが表示されたらカウントダウンを開始
   useEffect(() => {
     if (modalVisible) {
       startCountdown(5);
     }
   }, [modalVisible, startCountdown]);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("table_member_db_changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "posts",
+        },
+        (payload) => {
+          if (payload.eventType === "INSERT") {
+            console.log(payload);
+          }
+        }
+      )
+      .subscribe();
+    return () => {
+      channel.unsubscribe();
+    };
+  }, []);
 
   return (
     <div
@@ -85,4 +113,3 @@ export function GameHost() {
     </div>
   );
 }
-

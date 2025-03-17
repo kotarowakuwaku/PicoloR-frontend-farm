@@ -7,6 +7,7 @@ interface ColorCircleProps {
   delay: number;
   imageURL?: string;
   rank?: number;
+
   onAnimationComplete?: () => void;
 }
 const TestImage = "/test.png";
