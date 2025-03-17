@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import { HeaderMode } from "./types/HeaderMode";
-import reactLogo from "./assets/react.svg";
 import { css } from "../styled-system/css";
 import { flex } from "../styled-system/patterns";
 import { useParams } from "react-router-dom";
@@ -54,6 +53,10 @@ export function Rooms() {
     };
   }, []);
 
+  const onClickGameStart = () => {
+    window.location.href = `/PicoloR-frontend-farm/room/${roomId}/hostUser`;
+  }
+
   return (
     <>
       <Header mode={HeaderMode.GREEN} />
@@ -89,7 +92,7 @@ export function Rooms() {
           </div>
         </div>
         <div className={flex({ display: "flex", justify: "center", m: "0 auto", mt: "20px", w: "480px", h: "83px" })}>
-          <Button type={ButtonMode.GREEN} text="GAME START" />
+          <Button type={ButtonMode.GREEN} text="GAME START" onClick={onClickGameStart}/>
         </div>
       </div>
     </>
