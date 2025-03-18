@@ -1,4 +1,5 @@
 import { css } from "../styled-system/css";
+import { CROWN_IMAGE_PATH } from "./const";
 import Post from "./types/Post";
 
 function ControllerPlayingCleared({ post }: { post: Post }) {
@@ -20,8 +21,8 @@ function ControllerPlayingCleared({ post }: { post: Post }) {
         alt="入力画像"
       />
       <img
-        src="/first_place.png"
-        alt="王冠"
+        src={CROWN_IMAGE_PATH[post.rank - 1]}
+        alt={`${post.rank}位の王冠`}
         className={css({
           position: "absolute",
           top: "-50px",
