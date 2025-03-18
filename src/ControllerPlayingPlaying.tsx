@@ -87,6 +87,7 @@ function ControllerPlayingPlaying({
     fetch("https://picolor-backend-python.onrender.com/controller/image", {
       method: "POST",
       body: JSON.stringify({
+        roomID: roomIDNum,
         userID: userIDNum,
         colorID: selectedColor.ColorId,
         image: base64ImageString,
