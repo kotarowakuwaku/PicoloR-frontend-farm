@@ -145,11 +145,12 @@ export function Result() {
           >
             {top3Players.map((player) => (
               <li
+                key={player.Rank}
                 className={css({
                   m: "12px 0",
                 })}
               >
-                <RankBar key={player.Rank} {...player} />
+                <RankBar {...player} />
               </li>
             ))}
           </ul>
