@@ -111,25 +111,6 @@ export function ControllerJoin() {
     }
     
     createUserAndRoom();
-    const postMember = async () => {
-      console.log("postするぞ！");
-      fetch("https://picolor-backend-go.onrender.com/controller/room", {
-        method: "POST",
-        body: JSON.stringify({
-          roomID: roomIDNum,
-          userName: values.username,
-        }),
-      })
-        .then(async (res) => {
-          const data = await res.json();
-          const userID = data.userID;
-          window.location.href = `/PicoloR-frontend-farm/controller?roomID=${roomID}&userID=${userID}`;
-        })
-        .catch((err) => {
-          throw new Error(err);
-        });
-    };
-    postMember();
   };
 
   return (
