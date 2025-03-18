@@ -24,14 +24,14 @@ function ControllerPlayingCleared({ post }: { post: Post }) {
         src={CROWN_IMAGE_PATH[post.rank - 1]}
         alt={`${post.rank}位の王冠`}
         className={css({
+          w: "20dvh",
+          h: "15dvh",
           position: "absolute",
-          top: "-50px",
-          right: "-50px",
-          w: "100px",
-          h: "100px",
-          transform: "rotate(45deg)",
-          transition: "opacity 0.5s",
-          zIndex: 2,
+          transform: "rotate(40deg)",
+          float: "right",
+          top: "-15%",
+          right: "-15%",
+          zIndex: 1,
         })}
       />
     </div>
