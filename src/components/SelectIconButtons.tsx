@@ -18,12 +18,12 @@ const SelectIconButtons = ({ options, onChange }: SelectIconButtonsProps) => {
   return (
     <Space>
       {options.map(({ id, imageURL }) => (
-        <IconButton
-          key={id}
-          imageURL={imageURL}
-          onClick={() => handleClick(id)}
-          selected={selectedId === id}
-        />
+            <IconButton
+              key={id}
+              imageURL={imageURL}
+              onClick={() => handleClick(id)}
+              selected={selectedId === id}
+            />
       ))}
     </Space>
   );

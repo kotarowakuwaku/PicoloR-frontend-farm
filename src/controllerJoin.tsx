@@ -4,8 +4,8 @@ import { css } from "../styled-system/css";
 import Header from "./components/Header";
 import { HeaderMode } from "./types/HeaderMode";
 import { createStyles } from "antd-style";
-// import  SelectIconButtons  from "./components/SelectIconButtons";
-// import { useState } from "react";
+import  SelectIconButtons  from "./components/SelectIconButtons";
+import { useState } from "react";
 
 type FieldType = {
   username?: string;
@@ -45,11 +45,11 @@ export function ControllerJoin() {
   const roomID = url.searchParams.get("roomID");
   const roomIDNum = Number(roomID);
 
-  // const icons = [
-  //   { id: "1", imageURL: "/brash.svg" },
-  //   { id: "2", imageURL: "/devices.svg" },
-  //   { id: "3", imageURL: "/Logo.svg" },
-  // ];
+  const icons = [
+    { id: "1", imageURL: "/brash.svg" },
+    { id: "2", imageURL: "/devices.svg" },
+    { id: "3", imageURL: "/Logo.svg" },
+  ];
 
   if (!roomID) {
     return (
@@ -142,12 +142,12 @@ export function ControllerJoin() {
         requiredMark={false}
       >
 
-        {/* <Form.Item label={null}>
+        <Form.Item label={null}>
         <SelectIconButtons
           options={icons}
           onChange={(id) => console.log("選択された ID:", id)} // ✅ フォームの値として ID を設定
         />
-        </Form.Item> */}
+        </Form.Item>
 
         <Form.Item<FieldType>
           label={<span className={styles.customLabel}>USER NAME</span>}
