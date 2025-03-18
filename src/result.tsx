@@ -58,7 +58,6 @@ export function Result() {
                             "Content-Type": "application/json",
                         },
                     }
-                    //TODO CORSエラーが出るので、しょーまに確認
                 );
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -66,7 +65,6 @@ export function Result() {
             } catch (err) {
                 console.error("Fetch error:", err);
             } finally {
-                // 遷移先
                 // window.location.href = `/PicoloR-frontend-farm/room/${roomId}`;
             }
 
@@ -77,67 +75,87 @@ export function Result() {
     const onClickHome = () => {
         const deleteRoom = async () => {
             try {
-                const response = await fetch(
-                    `https://picolor-backend-go.onrender.com/host/room?roomID=${roomId}`,
+                // posts, room_members, roomColor
+                const deleteUserColor = await fetch(
+                    `https://picolor-backend-go.onrender.com/host/room/reset?roomID=${roomId}`,
                     {
                         method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
                     }
                 );
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                if (!deleteUserColor.ok) {
+                    throw new Error(`HTTP error! status: ${deleteUserColor.status}`);
                 }
+                //rooms
+
             } catch (err) {
                 console.error("Fetch error:", err);
             } finally {
-                // 遷移先
                 // window.location.href = `/PicoloR-frontend-farm/`;
+                try {
+                    const deleteRoom = await fetch(
+                        `https://picolor-backend-go.onrender.com/host/room?roomID=${roomId}`,
+                        {
+                            method: "DELETE",
+                        }
+                    );
+                    if (!deleteRoom.ok) {
+                        throw new Error(`HTTP error! status: ${deleteRoom.status}`);
+                    }
+                } catch (err) {
+                    console.error("Fetch error:", err);
+                } finally {
+                    // window.location.href = `/PicoloR-frontend-farm/`;
+                }
             }
         }
 
-        deleteRoom();
-    }
+            deleteRoom();
+        }
 
-    return (
-        <>
-            <Header mode={HeaderMode.GRAY} />
-            <div className={flex({
-                mt: "90px",
-                w: "100vw",
-                display: "flex",
-                justify: "center",
-            })}>
-                {top3Players && (
-                    <ul className={css({
-                        w: "80%",
+        return (
+            <>
+                <Header mode={HeaderMode.GRAY} />
+                <div className={flex({
+                    mt: "90px",
+                    w: "100vw",
+                    display: "flex",
+                    justify: "center",
+                })}>
+                    {top3Players && (
+                        <ul className={css({
+                            w: "80%",
+                        })}>
+                            {top3Players.map((player) => (
+                                <li className={css({
+                                    m: "12px 0"
+                                })}>
+                                    <RankBar key={player.Rank} {...player} />
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+                <div className={flex({
+                    display: "flex",
+                    justify: "space-around",
+                    mt: "20px",
+                })}>
+                    <div className={css({
+                        w: "40%",
+                        ml: "50px"
                     })}>
-                        {top3Players.map((player) => (
-                            <li className={css({
-                                m: "12px 0"
-                            })}>
-                                <RankBar key={player.Rank} {...player} />
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
-            <div className={flex({
-                display: "flex",
-                justify: "space-around",
-                mt: "20px",
-            })}>
-                <div className={css({
-                    w: "40%",
-                    ml: "50px"
-                })}>
-                    <Button type={ButtonMode.GREEN} text="もう一度遊ぶ" onClick={onCliclkRetry} />
+                        <Button type={ButtonMode.GREEN} text="もう一度遊ぶ" onClick={onCliclkRetry} />
+                    </div>
+                    <div className={css({
+                        w: "40%",
+                        mr: "50px"
+                    })}>
+                        <Button type={ButtonMode.GRAY} text="HOMEへ戻る" onClick={onClickHome} />
+                    </div>
                 </div>
-                <div className={css({
-                    w: "40%",
-                    mr: "50px"
-                })}>
-                    <Button type={ButtonMode.GRAY} text="HOMEへ戻る" onClick={onClickHome} />
-                </div>
-            </div>
-        </>
-    )
-}
+            </>
+        )
+    }
