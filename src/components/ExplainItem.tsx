@@ -5,6 +5,7 @@ interface ExplainItemProps {
   id: string;
   text: string;
   iconPath: string;
+  isMobile?: boolean;
   alt: string;
 }
 
@@ -12,6 +13,7 @@ const ExplainItem: React.FC<ExplainItemProps> = ({
   id,
   text,
   iconPath,
+  isMobile,
   alt,
 }) => {
   return (
@@ -21,7 +23,7 @@ const ExplainItem: React.FC<ExplainItemProps> = ({
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        gap: "10px",
+        gap: isMobile ? "0" : "10px",
       })}
     >
       <img
@@ -29,7 +31,7 @@ const ExplainItem: React.FC<ExplainItemProps> = ({
         src={iconPath}
         alt={alt}
         className={css({
-          h: "160px",
+          h: isMobile ? "100px" : "160px",
           transition: "transform 0.2s",
           "&:hover": {
             transform: "scale(1.2)",
@@ -39,7 +41,7 @@ const ExplainItem: React.FC<ExplainItemProps> = ({
       <label
         htmlFor={id}
         className={css({
-          fontSize: "1.2rem",
+          fontSize: isMobile ? "1rem" : "1.2rem",
           color: "var(--secondary)",
         })}
       >
