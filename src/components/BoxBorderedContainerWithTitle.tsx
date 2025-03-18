@@ -2,11 +2,13 @@ import { css } from "../../styled-system/css";
 
 interface BoxBorderedContainerWithTitleProps {
   title: string;
+  isMobile?: boolean;
   children: React.ReactNode;
 }
 
 const BoxBorderedContainerWithTitle = ({
   title,
+  isMobile,
   children,
 }: BoxBorderedContainerWithTitleProps) => {
   return (
@@ -62,7 +64,7 @@ const BoxBorderedContainerWithTitle = ({
         >
           <span
             className={css({
-              fontSize: "2rem",
+              fontSize:isMobile?"1.2rem": "2rem",
               w: "fit-content",
               bg: "var(--light)",
               backgroundImage: `url("https://www.transparenttextures.com/patterns/45-degree-fabric-light.png")`,

@@ -129,6 +129,9 @@ export function Main() {
               defaultHoverBg: "#dddddd",
               defaultHoverColor: "var(--secondary)",
               defaultHoverBorderColor: "var(--secondary)",
+              defaultActiveColor: "#F5F5F5",
+              defaultActiveBg: "#2E2E2E",
+              defaultActiveBorderColor: "#2E2E2E",
             },
           },
         }}
