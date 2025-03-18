@@ -9,26 +9,24 @@ import Stopwatch from "./components/Stopwatch";
 import useCountdown from "./hooks/useCountdown";
 import useStopwatch from "./hooks/useStopwatch";
 import { supabase } from "./supabase/supabase";
-import { data } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { PostedResult } from "./components/PostedResult";
+
+interface PostedUser {
+  name: string;
+  user_id: number;
+}
 
 export function GameHost() {
   const [modalVisible, setModalVisible] = useState(false);
   const [stopwatchVisible, setStopwatchVisible] = useState(false);
   const { roomId } = useParams<{ roomId: string }>();
   const [themeColors, setThemeColors] = useState<ColorObj[]>([]);
-  const [imageURL, setImageURL] = useState<string>();
+  console.log("themeColors", themeColors);
   const [payloadNew, setPayloadNew] = useState<PayloadNew[]>([]);
-  const [posetedname, setPostedName] = useState<
-    | [
-        {
-          name: string;
-          user_id: number;
-        }
-      ]
-    | []
-  >([]);
+  const [posts, setPosts] = useState<PostedUser[]>([]);
+
+  console.log("posetedname", posts);
 
   const functionAfterModalCountdown = () => {
     setModalVisible(false);
@@ -150,13 +148,17 @@ export function GameHost() {
   }, [roomId]);
 
   useEffect(() => {
+    judgeGameIsFinished(themeColors, posts);
+  }, [themeColors, posts]);
+
+  useEffect(() => {
     console.log("roomId", roomId);
     const channel = supabase
       .channel("table_db_changes")
       .on(
         "postgres_changes",
         {
-          event: "*",
+          event: "INSERT",
           schema: "public",
           table: "posts",
         },
@@ -175,11 +177,12 @@ export function GameHost() {
               if (error) {
                 console.error(error);
               } else if (Data) {
-                setPostedName((prev) => [
+                setPosts((prev) => [
                   {
                     name: Data.name,
                     user_id: payload.new.user_id,
                   },
+                  ...prev,
                 ]);
               }
             }
@@ -192,6 +195,53 @@ export function GameHost() {
       channel.unsubscribe();
     };
   }, []);
+
+  const handleGameFinish = async () => {
+    fetch(`https://picolor-backend-go.onrender.com/host/room/finish`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        roomId: Number(roomId),
+      }),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          console.error("Error finishing the game");
+        } else {
+          window.location.href = `/PicoloR-frontend-farm/result/${roomId}`;
+        }
+      })
+      .catch((error) => {
+        console.error("Error finishing the game:", error);
+      });
+  };
+
+  const judgeGameIsFinished = async (
+    currentThemeColors: ColorObj[],
+    currentPostedName: PostedUser[]
+  ) => {
+    console.log("currentThemeColors", currentThemeColors);
+    console.log("currentPostedName", currentPostedName);
+    const themeColorNum = currentThemeColors.length;
+    const postedNum = currentPostedName.length;
+    console.log("themeColorNum", themeColorNum);
+    console.log("postedNum", postedNum);
+    if (themeColorNum === 0) {
+      console.error("themeColors is empty");
+      return;
+    }
+    if (postedNum === 0) {
+      console.error("postedName is empty");
+      return;
+    }
+    if (themeColorNum === postedNum) {
+      console.log("game is finished");
+      handleGameFinish();
+    }
+  };
+
   return (
     <div
       className={css({
@@ -237,7 +287,7 @@ export function GameHost() {
                     ?.posted_time || ""
                 }
                 name={
-                  posetedname?.find((item) => item.user_id === colorObj.ColorId)
+                  posts?.find((item) => item.user_id === colorObj.ColorId)
                     ?.name || ""
                 }
               />
