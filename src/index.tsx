@@ -4,6 +4,7 @@ import { Main } from "./main";
 import { Rooms } from "./room"; // 新しく作成したTestコンポーネント
 import { GameHost } from "./gamehost"; // 新しく作成したTestコンポーネント
 import { Result } from "./result";
+import { Test } from "./test";
 import "./index.css";
 import "../styled-system/styles.css";
 import { ControllerJoin } from "./controllerJoin";
@@ -16,6 +17,7 @@ root.render(
   <BrowserRouter>
     <Routes>
       <Route path="PicoloR-frontend-farm/" element={<Main />} />
+      <Route path="PicoloR-frontend-farm/test" element={<Test />} />
 
 
       <Route path="PicoloR-frontend-farm/room/:roomId" element={<Rooms />} />
