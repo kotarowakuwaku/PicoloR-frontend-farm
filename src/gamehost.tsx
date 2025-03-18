@@ -32,7 +32,7 @@ export function GameHost() {
   };
 
   type PayloadNew = {
-    color_id: string;
+    color_id: number;
     image: string;
     posted_time: string;
     rank: number;
@@ -41,6 +41,7 @@ export function GameHost() {
   };
 
   const stopwatch = useStopwatch();
+  console.log("themeColors", themeColors);
 
   useEffect(() => {
     if (modalVisible) {
@@ -66,6 +67,25 @@ export function GameHost() {
         console.error("Error fetching theme colors:", error);
       }
     };
+
+    // const fetchPostData = async () => {
+    //   try {
+    //     const { data: postData, error } = await supabase
+    //       .from("posts")
+    //       .select("*")
+    //       .eq("room_id", roomId);
+    //     if (error) {
+    //       console.error(error);
+    //     } else if (postData) {
+    //       console.log("postDataaaaaaaaaaaaa", postData);
+    //       setPayloadNew(postData);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching post data:", error);
+    //   }
+    // };
+
+    // fetchPostData();
     fetchThemeColors();
   }, [roomId]);
 
@@ -82,13 +102,9 @@ export function GameHost() {
         },
 
         async (payload) => {
-          console.log("start channel");
-          console.log("payload", payload);
           if (payload.eventType === "INSERT") {
-            console.log(payload);
-            console.log(payload.new?.room_id);
+            console.log("hogee000000", payload.new);
             setPayloadNew((prev) => [payload.new as PayloadNew, ...prev]);
-            console.log("payloadNew", payloadNew);
 
             if (payload.new?.room_id === Number(roomId)) {
               const { data: Data, error } = await supabase
@@ -99,7 +115,7 @@ export function GameHost() {
               if (error) {
                 console.error(error);
               } else if (Data) {
-                console.log(Data);
+                // console.log(Data);
               }
             }
           }
@@ -133,7 +149,7 @@ export function GameHost() {
             color={colorObj.ColorCode}
             delay={index * 1.0}
             imageURL={
-              payloadNew?.find((item) => item.color_id === colorObj.ColorCode)
+              payloadNew?.find((item) => item.color_id === colorObj.ColorId)
                 ?.image || ""
             }
             // rank={payloadNew?.rank}
