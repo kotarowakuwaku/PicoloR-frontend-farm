@@ -1,8 +1,8 @@
 export default interface RankBarProps {
-    color: string;
-    rank: number;
-    name: string;
-    time: string;
+    Color: string;
+    Rank: number;
+    UserName: string;
+    PostedTime: string;
     imageURL: string;
   }
   
