@@ -30,11 +30,14 @@ export function GameHost() {
     | []
   >([]);
 
-  const { count, isCounting, startCountdown } = useCountdown(() => {
+  const functionAfterModalCountdown = () => {
     setModalVisible(false);
     setStopwatchVisible(true);
     stopwatch.start();
-  });
+    handlestart();
+  };
+
+  const { count, startCountdown } = useCountdown(functionAfterModalCountdown);
 
   type ColorObj = {
     ColorId: number;
@@ -53,6 +56,30 @@ export function GameHost() {
   const stopwatch = useStopwatch();
   console.log("themeColors", themeColors);
 
+  const handlestart = async () => {
+    const timestampz = new Date();
+    console.log("timestampz", timestampz);
+    try {
+      const response = await fetch(
+        `https://picolor-backend-go.onrender.com//host/room/start`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            roomID: Number(roomId),
+            startTime: timestampz,
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error fetching theme colors:", error);
+    }
+  };
   // useEffect(() => {
   //   const fetchPostedName = async (userId: number) => {
   //     const { data, error } = await supabase
