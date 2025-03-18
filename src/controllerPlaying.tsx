@@ -1,9 +1,6 @@
-import { Button, ConfigProvider, Form, Input } from "antd";
-import type { FormProps } from "antd";
 import { css } from "../styled-system/css";
 import Header from "./components/Header";
 import { HeaderMode } from "./types/HeaderMode";
-import { createStyles } from "antd-style";
 import { CONTROLLER_PLAYING_MODE } from "./const";
 import { useState } from "react";
 import ControllerPlayingWaiting from "./ControllerPlayingWaiting";
@@ -13,10 +10,9 @@ import UserName from "./UserName";
 export function ControllerPlaying() {
   const url = new URL(window.location.href);
   const roomID = url.searchParams.get("roomID");
-  const roomIDNum = Number(roomID);
   const userID = url.searchParams.get("userID");
   console.log("roomID: ", roomID, ", userID: ", userID);
-  const [currentMode, setCurrentMode] = useState<CONTROLLER_PLAYING_MODE>(
+  const [currentMode, _setCurrentMode] = useState<CONTROLLER_PLAYING_MODE>(
     CONTROLLER_PLAYING_MODE.PLAYING
   );
 
