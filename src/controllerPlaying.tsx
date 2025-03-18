@@ -8,11 +8,13 @@ import ControllerPlayingPlaying from "./ControllerPlayingPlaying";
 import UserName from "./UserName";
 import { supabase } from "./supabase/supabase";
 import ThemeColor from "./types/ThemeColor";
+import LoadingModal from "./components/Loading";
 
 export function ControllerPlaying() {
   const [currentMode, setCurrentMode] = useState<CONTROLLER_PLAYING_MODE>(
     CONTROLLER_PLAYING_MODE.WAITING
   );
+  const [isLoading, setIsLoading] = useState(true);
   const [themeColors, setThemeColors] = useState<ThemeColor[] | null>(null);
   console.log("themeColors", themeColors);
   const url = new URL(window.location.href);
@@ -102,8 +104,13 @@ export function ControllerPlaying() {
       }
     };
 
-    getThemeColors();
-    getCurrentPlayingMode();
+    const firstFetch = async () => {
+      await getThemeColors();
+      await getCurrentPlayingMode();
+      setIsLoading(false);
+    };
+
+    firstFetch();
   }, []);
 
   if (!roomID) {
@@ -164,6 +171,26 @@ export function ControllerPlaying() {
           <br />
           正しい画面に接続してください。
         </p>
+      </main>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <main
+        className={css({
+          h: "100dvh",
+          w: "100dvw",
+          p: "10px 30px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+          alignItems: "center",
+        })}
+      >
+        <Header mode={HeaderMode.GREEN} />
+
+        <LoadingModal />
       </main>
     );
   }
