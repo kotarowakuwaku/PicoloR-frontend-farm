@@ -42,7 +42,7 @@ export function Rooms() {
 
     fetchMembers();
   }
-  , [roomId]);
+    , [roomId]);
 
   useEffect(() => {
     const channel = supabase
@@ -52,13 +52,13 @@ export function Rooms() {
         {
           event: "INSERT",
           schema: "public",
-          table: "room_members", 
+          table: "room_members",
         },
         async (payload) => {
           if (payload.eventType === "INSERT") {
             console.log(payload);
             console.log(payload.new?.room_id);
-            if(payload.new?.room_id === Number(roomId)) {
+            if (payload.new?.room_id === Number(roomId)) {
               const { data: newMember, error } = await supabase
                 .from("users")
                 .select("name")
@@ -80,8 +80,27 @@ export function Rooms() {
     };
   }, []);
 
-  const onClickGameStart = () => {
-    window.location.href = `/PicoloR-frontend-farm/room/${roomId}/hostUser`;
+  const onClickGameStart = async () => {
+    if(members.length < 2){
+      alert("2人以上でゲームを開始してください");
+      return;
+    }
+    try {
+      const response = await fetch(
+        `https://picolor-backend-python.onrender.com/host/theme_color?roomID=${roomId}`,
+        {
+          method: "GET",
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      console.log(response);
+    } catch (err) {
+      console.error("Fetch error:", err);
+    }finally{
+      // window.location.href = `/PicoloR-frontend-farm/room/${roomId}/hostUser`;
+    }
   }
 
   return (
@@ -119,7 +138,7 @@ export function Rooms() {
           </div>
         </div>
         <div className={flex({ display: "flex", justify: "center", m: "0 auto", mt: "20px", w: "480px", h: "83px" })}>
-          <Button type={ButtonMode.GREEN} text="GAME START" onClick={onClickGameStart}/>
+          <Button type={ButtonMode.GREEN} text="GAME START" onClick={onClickGameStart} />
         </div>
       </div>
     </>
