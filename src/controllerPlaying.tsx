@@ -7,12 +7,14 @@ import ControllerPlayingWaiting from "./ControllerPlayingWaiting";
 import ControllerPlayingPlaying from "./ControllerPlayingPlaying";
 import UserName from "./UserName";
 import { supabase } from "./supabase/supabase";
+import ThemeColor from "./types/ThemeColor";
 
 export function ControllerPlaying() {
   const [currentMode, setCurrentMode] = useState<CONTROLLER_PLAYING_MODE>(
     CONTROLLER_PLAYING_MODE.WAITING
   );
-  const [themeColors, setThemeColors] = useState<string[]>([]);
+  const [themeColors, setThemeColors] = useState<ThemeColor[] | null>(null);
+  console.log("themeColors", themeColors);
   const url = new URL(window.location.href);
   const roomID = url.searchParams.get("roomID");
   const roomIDNum = Number(roomID);
@@ -57,6 +59,25 @@ export function ControllerPlaying() {
     return () => {
       channel.unsubscribe();
     };
+  }, []);
+
+  useEffect(() => {
+    async function getThemeColors() {
+      const res = await fetch(
+        `https://picolor-backend-go.onrender.com/controller/colors?roomID=${roomID}`,
+        {
+          method: "GET",
+        }
+      );
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      const data = await res.json();
+      console.log(data);
+      setThemeColors(data.themeColors);
+    }
+
+    getThemeColors();
   }, []);
 
   if (!roomID) {
@@ -121,6 +142,37 @@ export function ControllerPlaying() {
     );
   }
 
+  if (!themeColors || themeColors.length === 0) {
+    return (
+      <main
+        className={css({
+          h: "100dvh",
+          w: "100dvw",
+          p: "10px 30px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+          alignItems: "center",
+        })}
+      >
+        <Header mode={HeaderMode.GREEN} />
+
+        <p
+          className={css({
+            fontSize: "1.2rem",
+            fontWeight: "bold",
+            color: "red",
+            textAlign: "center",
+          })}
+        >
+          テーマカラーが取得できませんでした。
+          <br />
+          もう一度接続してください。
+        </p>
+      </main>
+    );
+  }
+
   return (
     <main
       className={css({
@@ -135,7 +187,7 @@ export function ControllerPlaying() {
     >
       <Header mode={HeaderMode.GREEN} />
       {/* currentModeによって切り替える */}
-      {currentMode === CONTROLLER_PLAYING_MODE.WAITING && (
+      {/* {currentMode === CONTROLLER_PLAYING_MODE.WAITING && (
         <ControllerPlayingWaiting />
       )}
       {currentMode === CONTROLLER_PLAYING_MODE.PLAYING && (
@@ -150,7 +202,25 @@ export function ControllerPlaying() {
         <div>
           <h1>FINISHED</h1>
         </div>
-      )}
+      )} */}
+
+      {themeColors &&
+        themeColors.map((color) => (
+          <div
+            key={color.ColorID}
+            style={{ backgroundColor: color.ColorCode }}
+            className={css({
+              w: "20dvh",
+              h: "20dvh",
+              borderRadius: "50%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            })}
+          >
+            <img src="/camera.svg" alt="カメラ" />
+          </div>
+        ))}
 
       <UserName userName={userID} />
     </main>
