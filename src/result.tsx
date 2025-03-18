@@ -8,12 +8,15 @@ import { flex } from '../styled-system/patterns'
 import RankBar from './components/RankBar'
 import RankBarProps from './types/RankBar'
 import { useParams } from "react-router-dom"
+import LoadingModal from './components/Loading'
 
 export function Result() {
     const { roomId } = useParams<{ roomId: string }>();
     const [top3Players, setTop3players] = useState<RankBarProps[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(true);
         const fetchResultData = async () => {
             try {
                 const response = await fetch(
@@ -45,6 +48,8 @@ export function Result() {
                 }))
             } catch (err) {
                 console.error("Fetch error:", err);
+            }finally {
+                setLoading(false);
             }
         }
 
@@ -52,6 +57,7 @@ export function Result() {
     }, [roomId]);
 
     const onCliclkRetry = () => {
+        setLoading(true);
         const resetColorAndUser = async () => {
             try {
                 const response = await fetch(
@@ -77,6 +83,7 @@ export function Result() {
         resetColorAndUser();
     }
     const onClickHome = () => {
+        setLoading(true);
         const deleteRoom = async () => {
             try {
                 // posts, room_members, roomColor
@@ -119,6 +126,7 @@ export function Result() {
 
         return (
             <>
+            {loading && <LoadingModal />}
                 <Header mode={HeaderMode.GRAY} />
                 <div className={flex({
                     mt: "90px",
