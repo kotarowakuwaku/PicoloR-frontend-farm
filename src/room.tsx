@@ -140,17 +140,15 @@ export function Rooms() {
           </div>
           <div className={flex({ width: "40%" })}>
             <BoxBorderedContainerWithTitle title="参加者一覧">
-              {members.length > 0 && (
-                <div
-                  className={flex({
-                    display: "flex",
-                    justify: "center",
-                    fontSize: "3rem",
-                  })}
-                >
-                  {members.length}人
-                </div>
-              )}
+              <div
+                className={flex({
+                  display: "flex",
+                  justify: "center",
+                  fontSize: "3rem",
+                })}
+              >
+                {members.length}人
+              </div>
               <ul
                 className={flex({
                   p: "5px 20px",
