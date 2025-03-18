@@ -31,7 +31,13 @@ export function ControllerPlaying() {
   async function getPost() {
     const { data: fetchedPost, error } = await supabase
       .from("posts")
-      .select("color_id, rank, image")
+      .select(
+        `
+        room_colors(color),
+        rank,
+        image
+      `
+      )
       .eq("room_id", roomID)
       .eq("user_id", userID)
       .single();
@@ -45,7 +51,8 @@ export function ControllerPlaying() {
       return false;
     }
     setPost({
-      colorCode: fetchedPost.color_id,
+      // @ts-ignore
+      colorCode: fetchedPost.room_colors.color,
       rank: fetchedPost.rank,
       imagePath: `data:image/jpeg;base64,${fetchedPost.image}`,
     });
@@ -349,6 +356,9 @@ export function ControllerPlaying() {
   if (post) {
     return (
       <main
+        style={{
+          background: post.colorCode,
+        }}
         className={css({
           h: "100dvh",
           w: "100dvw",
@@ -357,6 +367,7 @@ export function ControllerPlaying() {
           flexDirection: "column",
           justifyContent: "space-evenly",
           alignItems: "center",
+          overflow: "hidden",
         })}
       >
         <Header mode={HeaderMode.GRAY} />
