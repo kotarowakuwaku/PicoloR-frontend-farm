@@ -9,11 +9,14 @@ import UserName from "./UserName";
 import { supabase } from "./supabase/supabase";
 import ThemeColor, { ThemeColorsWithIsPosted } from "./types/ThemeColor";
 import LoadingModal from "./components/Loading";
+import ControllerPlayingCleared from "./ControllerPlayingCleared";
+import Post from "./types/Post";
 
 export function ControllerPlaying() {
   const [currentMode, setCurrentMode] = useState<CONTROLLER_PLAYING_MODE>(
     CONTROLLER_PLAYING_MODE.WAITING
   );
+  const [post, setPost] = useState<Post | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [themeColors, setThemeColors] = useState<
     ThemeColorsWithIsPosted[] | null
@@ -24,6 +27,29 @@ export function ControllerPlaying() {
   const roomID = url.searchParams.get("roomID");
   const roomIDNum = Number(roomID);
   const userID = url.searchParams.get("userID");
+
+  async function getPost() {
+    const { data: fetchedPost, error } = await supabase
+      .from("posts")
+      .select("color_id, rank, image")
+      .eq("room_id", roomID)
+      .eq("user_id", userID)
+      .single();
+
+    if (error) {
+      console.error(error);
+      return false;
+    }
+    if (!fetchedPost) {
+      console.error("data is null");
+      return false;
+    }
+    setPost({
+      colorCode: fetchedPost.color_id,
+      rank: fetchedPost.rank,
+      imagePath: `data:image/jpeg;base64,${fetchedPost.image}`,
+    });
+  }
 
   async function getIsCleared() {
     const { data: fetchedPost, error } = await supabase
@@ -47,7 +73,7 @@ export function ControllerPlaying() {
       );
 
     if (isPosted) {
-      setCurrentMode(CONTROLLER_PLAYING_MODE.CLEARED);
+      await getPost();
     }
 
     return fetchedPost;
@@ -100,7 +126,7 @@ export function ControllerPlaying() {
               const isStart = payload.new?.is_start;
               const isFinish = payload.new?.is_finish;
               switch (true) {
-                case currentMode === CONTROLLER_PLAYING_MODE.CLEARED:
+                case post !== null:
                   break;
                 case isFinish:
                   setCurrentMode(CONTROLLER_PLAYING_MODE.FINISHED);
@@ -137,11 +163,6 @@ export function ControllerPlaying() {
             if (payload.new?.room_id === roomIDNum) {
               if (!themeColors) {
                 return;
-              }
-              if (payload.new?.user_id === userID) {
-                if (currentMode !== CONTROLLER_PLAYING_MODE.CLEARED) {
-                  setCurrentMode(CONTROLLER_PLAYING_MODE.CLEARED);
-                }
               }
               setThemeColors((prevThemeColors) => {
                 if (!prevThemeColors) {
@@ -325,6 +346,26 @@ export function ControllerPlaying() {
     );
   }
 
+  if (post) {
+    return (
+      <main
+        className={css({
+          h: "100dvh",
+          w: "100dvw",
+          p: "10px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+          alignItems: "center",
+        })}
+      >
+        <Header mode={HeaderMode.GRAY} />
+        <ControllerPlayingCleared post={post} />
+        <UserName userName={userName || "unknown controller"} />
+      </main>
+    );
+  }
+
   if (currentMode === CONTROLLER_PLAYING_MODE.FINISHED) {
     return (
       <main
@@ -348,35 +389,6 @@ export function ControllerPlaying() {
           })}
         >
           LOSE
-        </p>
-        <UserName userName={userName || "unknown controller"} />
-      </main>
-    );
-  }
-
-  if (currentMode === CONTROLLER_PLAYING_MODE.CLEARED) {
-    return (
-      <main
-        className={css({
-          h: "100dvh",
-          w: "100dvw",
-          p: "10px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-evenly",
-          alignItems: "center",
-        })}
-      >
-        <Header mode={HeaderMode.GRAY} />
-        <p
-          className={css({
-            fontSize: "4rem",
-            fontWeight: "bold",
-            color: "var(--dark)",
-            WebkitTextStroke: "1px var(--secondary)",
-          })}
-        >
-          CLEAR
         </p>
         <UserName userName={userName || "unknown controller"} />
       </main>
@@ -427,10 +439,7 @@ export function ControllerPlaying() {
       })}
     >
       <Header mode={HeaderMode.GRAY} />
-      <ControllerPlayingPlaying
-        themeColors={themeColors}
-        setCurrentMode={setCurrentMode}
-      />
+      <ControllerPlayingPlaying themeColors={themeColors} />
 
       <UserName userName={userName || "unknown controller"} />
     </main>

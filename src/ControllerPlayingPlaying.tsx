@@ -3,20 +3,18 @@ import { css } from "../styled-system/css";
 import { useEffect, useState } from "react";
 import ThemeColor, { ThemeColorsWithIsPosted } from "./types/ThemeColor";
 import ColorInputCircle from "./components/ColorInputCircle";
-import { CONTROLLER_PLAYING_MODE } from "./types/ControllerPlayingMode";
+import Post from "./types/Post";
 
 function ControllerPlayingPlaying({
   themeColors,
-  setCurrentMode,
 }: {
   themeColors: ThemeColorsWithIsPosted[];
-  setCurrentMode: (mode: CONTROLLER_PLAYING_MODE) => void;
 }) {
   const [isJudging, setIsJudging] = useState(false);
   const [selectedColor, setSelectedColor] = useState<ThemeColor | null>(null);
   const [inputFileString, setInputFileString] = useState<string | null>(null);
   const [inputFile, setInputFile] = useState<File | null>(null);
-  const [rank, setRank] = useState<number | null>(null);
+  const [post, setPost] = useState<Post | null>(null);
   const [messageApi, contextHolder] = message.useMessage();
 
   const url = new URL(window.location.href);
@@ -102,7 +100,7 @@ function ControllerPlayingPlaying({
           messageApi.error(res.statusText);
           setInputFileString(null);
           setInputFile(null);
-          setRank(null);
+          setPost(null);
           return;
         }
 
@@ -112,18 +110,23 @@ function ControllerPlayingPlaying({
           messageApi.error("is_success is undefined");
           setInputFileString(null);
           setInputFile(null);
-          setRank(null);
+          setPost(null);
           return;
         }
         if (data.is_success) {
-          setRank(data.rank);
+          setPost({
+            colorCode: selectedColor.ColorCode,
+            rank: data.rank,
+            imagePath: inputFileString || "",
+          });
           messageApi.success("色の判定が完了しました！");
-          setCurrentMode(CONTROLLER_PLAYING_MODE.CLEARED);
+
+          setPost;
           return;
         } else {
           setInputFileString(null);
           setInputFile(null);
-          setRank(null);
+          setPost(null);
           messageApi.error(data.error);
           return;
         }
@@ -133,7 +136,7 @@ function ControllerPlayingPlaying({
         messageApi.error(err);
         setInputFileString(null);
         setInputFile(null);
-        setRank(null);
+        setPost(null);
       });
   };
 
@@ -238,7 +241,7 @@ function ControllerPlayingPlaying({
               h: "100px",
               transform: "rotate(45deg)",
               transition: "opacity 0.5s",
-              opacity: rank === 1 ? "1" : "0",
+              opacity: post?.rank === 1 ? "1" : "0",
               zIndex: 2,
             })}
           />
