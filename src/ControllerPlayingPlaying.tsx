@@ -49,9 +49,7 @@ function ControllerPlayingPlaying() {
     const base64ImageString = base64Image.split(",")[1];
     console.log("今からpost!", base64ImageString);
 
-    // fetch("https://picolor-backend-python.onrender.com/controller/image", {
-    // fetch("http://172.20.10.2:8000/controller/image", {
-    fetch("http://192.168.179.12:8000/controller/image", {
+    fetch("https://picolor-backend-python.onrender.com/controller/image", {
       method: "POST",
       body: JSON.stringify({
         userID: userIDNum,
