@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import type UseCountdownResult from "../types/Countdown";
 
-const useCountdown = (onComplete?: () => void): UseCountdownResult => {
+const useCountdown = (onComplete: () => void): UseCountdownResult => {
   const startCountdown = useCallback((initialCount: number) => {
     setCount(initialCount);
     setIsCounting(true);
@@ -28,7 +28,7 @@ const useCountdown = (onComplete?: () => void): UseCountdownResult => {
   useEffect(() => {
     if (isCounting && count === 0) {
       setIsCounting(false);
-      if (onComplete) onComplete();
+      onComplete();
     }
   }, [count, isCounting, onComplete]);
 
