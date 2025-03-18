@@ -16,11 +16,27 @@ export function ControllerPlaying() {
   );
   const [isLoading, setIsLoading] = useState(true);
   const [themeColors, setThemeColors] = useState<ThemeColor[] | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
   console.log("themeColors", themeColors);
   const url = new URL(window.location.href);
   const roomID = url.searchParams.get("roomID");
   const roomIDNum = Number(roomID);
   const userID = url.searchParams.get("userID");
+
+  async function getThemeColors() {
+    const res = await fetch(
+      `https://picolor-backend-go.onrender.com/controller/colors?roomID=${roomID}`,
+      {
+        method: "GET",
+      }
+    );
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    const data = await res.json();
+    console.log(data);
+    setThemeColors(data.themeColors);
+  }
 
   useEffect(() => {
     const channel = supabase
@@ -43,6 +59,9 @@ export function ControllerPlaying() {
                   window.location.href = `/result?roomID=${roomID}&userID=${userID}`;
                   break;
                 case isStart:
+                  if (currentMode === CONTROLLER_PLAYING_MODE.WAITING) {
+                    await getThemeColors();
+                  }
                   setCurrentMode(CONTROLLER_PLAYING_MODE.PLAYING);
                   break;
                 default:
@@ -61,20 +80,6 @@ export function ControllerPlaying() {
   }, []);
 
   useEffect(() => {
-    async function getThemeColors() {
-      const res = await fetch(
-        `https://picolor-backend-go.onrender.com/controller/colors?roomID=${roomID}`,
-        {
-          method: "GET",
-        }
-      );
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-      const data = await res.json();
-      console.log(data);
-      setThemeColors(data.themeColors);
-    }
     const getCurrentPlayingMode = async () => {
       const { data, error } = await supabase
         .from("rooms")
@@ -96,6 +101,7 @@ export function ControllerPlaying() {
           window.location.href = `/result?roomID=${roomID}&userID=${userID}`;
           break;
         case isStart:
+          await getThemeColors();
           setCurrentMode(CONTROLLER_PLAYING_MODE.PLAYING);
           break;
         default:
@@ -103,10 +109,27 @@ export function ControllerPlaying() {
           break;
       }
     };
+    const userNameFetch = async () => {
+      const { data, error } = await supabase
+        .from("users")
+        .select("name")
+        .eq("id", userID)
+        .single();
+      if (error) {
+        console.error("error", error);
+        return;
+      }
+      if (!data) {
+        console.error("data is null");
+        return;
+      }
+      console.log(data);
+      setUserName(data.name);
+    };
 
     const firstFetch = async () => {
-      await getThemeColors();
       await getCurrentPlayingMode();
+      await userNameFetch();
       setIsLoading(false);
     };
 
@@ -194,6 +217,26 @@ export function ControllerPlaying() {
       </main>
     );
   }
+  if (currentMode === CONTROLLER_PLAYING_MODE.WAITING) {
+    return (
+      <main
+        className={css({
+          h: "100dvh",
+          w: "100dvw",
+          p: "10px 30px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+          alignItems: "center",
+        })}
+      >
+        <Header mode={HeaderMode.GREEN} />
+
+        <ControllerPlayingWaiting />
+        <UserName userName={userName || "unknown controller"} />
+      </main>
+    );
+  }
 
   if (!themeColors || themeColors.length === 0) {
     return (
@@ -238,16 +281,10 @@ export function ControllerPlaying() {
         alignItems: "center",
       })}
     >
-      <Header mode={HeaderMode.GREEN} />
-      {/* currentModeによって切り替える */}
-      {currentMode === CONTROLLER_PLAYING_MODE.WAITING && (
-        <ControllerPlayingWaiting />
-      )}
-      {currentMode === CONTROLLER_PLAYING_MODE.PLAYING && (
-        <ControllerPlayingPlaying themeColors={themeColors} />
-      )}
+      <Header mode={HeaderMode.GRAY} />
+      <ControllerPlayingPlaying themeColors={themeColors} />
 
-      <UserName userName={userID} />
+      <UserName userName={userName || "unknown controller"} />
     </main>
   );
 }
