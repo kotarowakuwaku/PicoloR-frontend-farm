@@ -1,13 +1,8 @@
-import React from "react";
 import { ConfigProvider, Modal } from "antd";
 import "../styles/loading.css";
-import { css } from "../../styled-system/css";
 
-interface LoadingModalProps {
-  visible: boolean;
-}
 
-const LoadingModal: React.FC<LoadingModalProps> = ({ visible }) => {
+const LoadingModal = () => {
   return (
     <>
       <ConfigProvider
@@ -20,7 +15,7 @@ const LoadingModal: React.FC<LoadingModalProps> = ({ visible }) => {
           },
         }}
       >
-        <Modal open={visible} footer={null} closable={false} title={null}>
+        <Modal open={true} footer={null} closable={false} title={null}>
           <div
             className={"title"}
           >
