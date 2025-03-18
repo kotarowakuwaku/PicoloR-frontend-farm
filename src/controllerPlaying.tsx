@@ -2,19 +2,62 @@ import { css } from "../styled-system/css";
 import Header from "./components/Header";
 import { HeaderMode } from "./types/HeaderMode";
 import { CONTROLLER_PLAYING_MODE } from "./const";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ControllerPlayingWaiting from "./ControllerPlayingWaiting";
 import ControllerPlayingPlaying from "./ControllerPlayingPlaying";
 import UserName from "./UserName";
+import { supabase } from "./supabase/supabase";
 
 export function ControllerPlaying() {
+  const [currentMode, setCurrentMode] = useState<CONTROLLER_PLAYING_MODE>(
+    CONTROLLER_PLAYING_MODE.WAITING
+  );
+
   const url = new URL(window.location.href);
   const roomID = url.searchParams.get("roomID");
+  const roomIDNum = Number(roomID);
   const userID = url.searchParams.get("userID");
-  console.log("roomID: ", roomID, ", userID: ", userID);
-  const [currentMode, _setCurrentMode] = useState<CONTROLLER_PLAYING_MODE>(
-    CONTROLLER_PLAYING_MODE.PLAYING
-  );
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("table_rooms_db_changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "rooms",
+        },
+        async (payload) => {
+          console.log(payload);
+          if (payload.eventType === "UPDATE") {
+            if (payload.new?.id === roomIDNum) {
+              const isStart = payload.new?.is_start;
+              const isFinish = payload.new?.is_finish;
+              switch (true) {
+                case isFinish:
+                  setCurrentMode(CONTROLLER_PLAYING_MODE.FINISHED);
+                  break;
+                case currentMode === CONTROLLER_PLAYING_MODE.CLEARED:
+                  setCurrentMode(CONTROLLER_PLAYING_MODE.FINISHED);
+                  break;
+                case isStart:
+                  setCurrentMode(CONTROLLER_PLAYING_MODE.PLAYING);
+                  break;
+                default:
+                  setCurrentMode(CONTROLLER_PLAYING_MODE.WAITING);
+                  break;
+              }
+            }
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      channel.unsubscribe();
+    };
+  }, []);
 
   if (!roomID) {
     return (
