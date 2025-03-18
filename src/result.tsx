@@ -27,7 +27,11 @@ export function Result() {
                 }
                 const resultData = await response.json();
                 console.log(resultData);
-                setTop3players(resultData.results.map((result: { Rank: number; UserName: string; PostedTime: string; Image: string; Color: string }) => {
+                const sortedResult = resultData.results.sort((a: { Rank: number; }, b: { Rank: number; }) => {
+                    return a.Rank - b.Rank;
+                })
+                console.log(sortedResult);
+                setTop3players(sortedResult.map((result: { Rank: number; UserName: string; PostedTime: string; Image: string; Color: string }) => {
                     const { Image, ...rest } = result;
                     const decoededImage = `data:image/jpeg;base64,${Image}`;
                     console.log({
