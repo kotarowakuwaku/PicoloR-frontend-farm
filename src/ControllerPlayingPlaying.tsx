@@ -1,13 +1,13 @@
 import { Form, message } from "antd";
 import { css } from "../styled-system/css";
 import { useEffect, useState } from "react";
-import ThemeColor from "./types/ThemeColor";
+import ThemeColor, { ThemeColorsWithIsPosted } from "./types/ThemeColor";
 import ColorInputCircle from "./components/ColorInputCircle";
 
 function ControllerPlayingPlaying({
   themeColors,
 }: {
-  themeColors: ThemeColor[];
+  themeColors: ThemeColorsWithIsPosted[];
 }) {
   const [isJudging, setIsJudging] = useState(false);
   const [selectedColor, setSelectedColor] = useState<ThemeColor | null>(null);

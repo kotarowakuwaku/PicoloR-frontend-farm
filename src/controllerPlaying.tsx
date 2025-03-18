@@ -7,7 +7,7 @@ import ControllerPlayingWaiting from "./ControllerPlayingWaiting";
 import ControllerPlayingPlaying from "./ControllerPlayingPlaying";
 import UserName from "./UserName";
 import { supabase } from "./supabase/supabase";
-import ThemeColor from "./types/ThemeColor";
+import ThemeColor, { ThemeColorsWithIsPosted } from "./types/ThemeColor";
 import LoadingModal from "./components/Loading";
 
 export function ControllerPlaying() {
@@ -15,7 +15,9 @@ export function ControllerPlaying() {
     CONTROLLER_PLAYING_MODE.WAITING
   );
   const [isLoading, setIsLoading] = useState(true);
-  const [themeColors, setThemeColors] = useState<ThemeColor[] | null>(null);
+  const [themeColors, setThemeColors] = useState<
+    ThemeColorsWithIsPosted[] | null
+  >(null);
   const [userName, setUserName] = useState<string | null>(null);
   console.log("themeColors", themeColors);
   const url = new URL(window.location.href);
@@ -35,11 +37,34 @@ export function ControllerPlaying() {
     }
     const data = await res.json();
     console.log(data);
-    setThemeColors(data.themeColors);
+    const fetchedThemeColors = data.themeColors;
+
+    const { data: fetchedPost, error } = await supabase
+      .from("posts")
+      .select("color_id")
+      .eq("room_id", roomIDNum);
+    if (error) {
+      console.error("error", error);
+      return;
+    }
+    if (!fetchedPost) {
+      console.error("data is null");
+      return;
+    }
+    console.log(fetchedPost);
+    const fetchedThemeColorsWithIsPosted = fetchedThemeColors.map(
+      (themeColor: ThemeColor) => {
+        const isPosted = fetchedPost.some(
+          (post: { color_id: number }) => post.color_id === themeColor.ColorId
+        );
+        return { ...themeColor, isPosted };
+      }
+    );
+    setThemeColors([...fetchedThemeColorsWithIsPosted]);
   }
 
   useEffect(() => {
-    const channel = supabase
+    const roomsChannel = supabase
       .channel("table_rooms_db_changes")
       .on(
         "postgres_changes",
@@ -74,8 +99,39 @@ export function ControllerPlaying() {
       )
       .subscribe();
 
+    const postsChannel = supabase
+      .channel("table_posts_db_changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "posts",
+        },
+        async (payload) => {
+          console.log("payload", payload);
+          if (payload.eventType === "INSERT") {
+            if (payload.new?.room_id === roomIDNum) {
+              setThemeColors((prevThemeColors) => {
+                if (!prevThemeColors) {
+                  return prevThemeColors;
+                }
+                return prevThemeColors.map((themeColor) => {
+                  if (themeColor.ColorId === payload.new?.color_id) {
+                    return { ...themeColor, isPosted: true };
+                  }
+                  return themeColor;
+                });
+              });
+            }
+          }
+        }
+      )
+      .subscribe();
+
     return () => {
-      channel.unsubscribe();
+      roomsChannel.unsubscribe();
+      postsChannel.unsubscribe();
     };
   }, []);
 
@@ -130,6 +186,7 @@ export function ControllerPlaying() {
     const firstFetch = async () => {
       await getCurrentPlayingMode();
       await userNameFetch();
+
       setIsLoading(false);
     };
 

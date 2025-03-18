@@ -1,9 +1,9 @@
 import React from "react";
 import { css } from "../../styled-system/css";
-import ThemeColor from "../types/ThemeColor";
+import { ThemeColorsWithIsPosted } from "../types/ThemeColor";
 
 interface ColorInputCircleProps {
-  color: ThemeColor;
+  color: ThemeColorsWithIsPosted;
   onClick: () => void;
 }
 
@@ -11,9 +11,10 @@ const ColorInputCircle: React.FC<ColorInputCircleProps> = ({
   color,
   onClick,
 }) => {
+  console.log(color.ColorCode);
   return (
     <label
-      htmlFor="file-input"
+      htmlFor={color.isPosted ? undefined : "file-input"}
       style={{
         backgroundColor: color.ColorCode,
       }}
@@ -24,10 +25,21 @@ const ColorInputCircle: React.FC<ColorInputCircleProps> = ({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        opacity: color.isPosted ? 0.5 : 1,
+        filter: color.isPosted ? "saturate(0.5)" : "saturate(1)",
+        boxShadow: "0 8px 8px rgba(0,0,0,0.25)",
       })}
-      onClick={onClick}
+      onClick={color.isPosted ? undefined : onClick}
+      aria-disabled={color.isPosted}
     >
-      <img src="/camera.svg" alt="カメラ" />
+      <img
+        className={css({
+          w: "60%",
+          h: "60%",
+        })}
+        src={color.isPosted ? "/verified.svg" : "/camera.svg"}
+        alt="カメラ"
+      />
     </label>
   );
 };
