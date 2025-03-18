@@ -104,7 +104,7 @@ export function GameHost() {
 
   useEffect(() => {
     if (modalVisible) {
-      startCountdown(5);
+      startCountdown(3);
     }
   }, [modalVisible, startCountdown]);
 
@@ -204,8 +204,8 @@ export function GameHost() {
       <div
         className={css({
           display: "flex",
-          justifyContent: "space-between",
-          padding: "0 15vw",
+          justifyContent: "space-evenly",
+          padding: "0 10vw",
         })}
       >
         {/* const decoededImage = `data:image/jpeg;base64,${Image}`; */}
