@@ -26,6 +26,7 @@ export function Result() {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const resultData = await response.json();
+                console.log(resultData);
                 setTop3players(resultData.results.map((result: { Rank: number; UserName: string; PostedTime: string; Image: string; Color: string }) => {
                     const { Image, ...rest } = result;
                     const decoededImage = `data:image/jpeg;base64,${Image}`;
@@ -50,10 +51,12 @@ export function Result() {
         const resetColorAndUser = async () => {
             try {
                 const response = await fetch(
-                    `https://picolor-backend-go.onrender.com/host/room/reset`,
+                    `https://picolor-backend-go.onrender.com/host/room/reset?roomID=${roomId}`,
                     {
                         method: "DELETE",
-                        body: JSON.stringify({ roomID: Number(roomId) }),
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
                     }
                     //TODO CORSエラーが出るので、しょーまに確認
                 );
@@ -75,10 +78,9 @@ export function Result() {
         const deleteRoom = async () => {
             try {
                 const response = await fetch(
-                    `https://picolor-backend-go.onrender.com/host/room`,
+                    `https://picolor-backend-go.onrender.com/host/room?roomID=${roomId}`,
                     {
                         method: "DELETE",
-                        body: JSON.stringify({ roomID: Number(roomId) }),
                     }
                 );
                 if (!response.ok) {
