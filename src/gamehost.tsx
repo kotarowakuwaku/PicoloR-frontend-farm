@@ -278,7 +278,9 @@ export function GameHost() {
                     ?.rank || 0
                 }
                 onAnimationComplete={
-                  index === 2 ? () => setModalVisible(true) : undefined
+                  index === themeColors.length
+                    ? () => setModalVisible(true)
+                    : undefined
                 }
               />
               <PostedResult
