@@ -9,8 +9,8 @@ export const PostedResult: React.FC<PostedResultProps> = ({
   return (
     <div>
       <div>
-        <h1>{name}</h1>
-        <h2>{postedTime}</h2>
+        <h1 style={{ textAlign: "center" }}>{name}</h1>
+        <h2 style={{ textAlign: "center" }}> {postedTime}</h2>
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ import useStopwatch from "./hooks/useStopwatch";
 import { supabase } from "./supabase/supabase";
 import { data } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { PostedResult } from "./components/PostedResult";
 
 export function GameHost() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -19,6 +20,15 @@ export function GameHost() {
   const [themeColors, setThemeColors] = useState<ColorObj[]>([]);
   const [imageURL, setImageURL] = useState<string>();
   const [payloadNew, setPayloadNew] = useState<PayloadNew[]>([]);
+  const [posetedname, setPostedName] = useState<
+    | [
+        {
+          name: string;
+          user_id: number;
+        }
+      ]
+    | []
+  >([]);
 
   const { count, isCounting, startCountdown } = useCountdown(() => {
     setModalVisible(false);
@@ -34,14 +44,36 @@ export function GameHost() {
   type PayloadNew = {
     color_id: number;
     image: string;
-    posted_time: string;
     rank: number;
     room_id: number;
     user_id: number;
+    posted_time: string;
   };
 
   const stopwatch = useStopwatch();
   console.log("themeColors", themeColors);
+
+  // useEffect(() => {
+  //   const fetchPostedName = async (userId: number) => {
+  //     const { data, error } = await supabase
+  //       .from("users")
+  //       .select("name")
+  //       .eq("id", userId)
+  //       .single();
+  //     if (error) {
+  //       console.error("Error fetching posted name:", error);
+  //     } else {
+  //       setPostedName(data?.name);
+  //     }
+  //   };
+
+  //   if (payloadNew && payloadNew.length > 0) {
+  //     const userId = payloadNew[0].user_id; // PayloadNew から user_id を取得
+  //     if (userId) {
+  //       fetchPostedName(userId);
+  //     }
+  //   }
+  // }, [payloadNew]);
 
   useEffect(() => {
     if (modalVisible) {
@@ -112,9 +144,16 @@ export function GameHost() {
                 .select("name")
                 .eq("id", payload.new.user_id)
                 .single();
+
               if (error) {
                 console.error(error);
               } else if (Data) {
+                setPostedName((prev) => [
+                  {
+                    name: Data.name,
+                    user_id: payload.new.user_id,
+                  },
+                ]);
               }
             }
           }
@@ -149,21 +188,33 @@ export function GameHost() {
           );
           console.log("foundItem", foundItem);
           return (
-            <ColorCircle
-              key={index}
-              color={colorObj.ColorCode}
-              delay={index * 1.0}
-              imageURL={
-                foundItem ? `data:image/jpeg;base64,${foundItem?.image}` : ""
-              }
-              rank={
-                payloadNew?.find((item) => item.color_id === colorObj.ColorId)
-                  ?.rank || 0
-              }
-              onAnimationComplete={
-                index === 2 ? () => setModalVisible(true) : undefined
-              }
-            />
+            <div>
+              <ColorCircle
+                key={index}
+                color={colorObj.ColorCode}
+                delay={index * 1.0}
+                imageURL={
+                  foundItem ? `data:image/jpeg;base64,${foundItem?.image}` : ""
+                }
+                rank={
+                  payloadNew?.find((item) => item.color_id === colorObj.ColorId)
+                    ?.rank || 0
+                }
+                onAnimationComplete={
+                  index === 2 ? () => setModalVisible(true) : undefined
+                }
+              />
+              <PostedResult
+                postedTime={
+                  payloadNew?.find((item) => item.color_id === colorObj.ColorId)
+                    ?.posted_time || ""
+                }
+                name={
+                  posetedname?.find((item) => item.user_id === colorObj.ColorId)
+                    ?.name || ""
+                }
+              />
+            </div>
           );
         })}
       </div>
