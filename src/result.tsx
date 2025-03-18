@@ -49,7 +49,7 @@ export function Result() {
             } catch (err) {
                 console.error("Fetch error:", err);
             }finally {
-                setLoading(false);
+                // setLoading(false);
             }
         }
 

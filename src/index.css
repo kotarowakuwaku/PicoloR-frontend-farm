@@ -29,3 +29,9 @@
     transform: translateY(90%);
   }
 }
+
+@keyframes l11 {
+  100% {
+      clip-path: inset(0 -30px 0 0);
+  }
+}
