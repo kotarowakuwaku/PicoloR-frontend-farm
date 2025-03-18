@@ -1,13 +1,21 @@
 import { Form, message } from "antd";
 import { css } from "../styled-system/css";
 import { useEffect, useState } from "react";
+import ThemeColor, { ThemeColorsWithIsPosted } from "./types/ThemeColor";
+import ColorInputCircle from "./components/ColorInputCircle";
+import Post from "./types/Post";
+import { CROWN_IMAGE_PATH } from "./const";
 
-function ControllerPlayingPlaying() {
+function ControllerPlayingPlaying({
+  themeColors,
+}: {
+  themeColors: ThemeColorsWithIsPosted[];
+}) {
   const [isJudging, setIsJudging] = useState(false);
-  const [selectedColor, setSelectedColor] = useState<number | null>(null);
+  const [selectedColor, setSelectedColor] = useState<ThemeColor | null>(null);
   const [inputFileString, setInputFileString] = useState<string | null>(null);
   const [inputFile, setInputFile] = useState<File | null>(null);
-  const [rank, setRank] = useState<number | null>(null);
+  const [post, setPost] = useState<Post | null>(null);
   const [messageApi, contextHolder] = message.useMessage();
 
   const url = new URL(window.location.href);
@@ -16,7 +24,47 @@ function ControllerPlayingPlaying() {
   const userID = url.searchParams.get("userID");
   const userIDNum = Number(userID);
 
-  const color = "#ffff00";
+  const compressImage = (
+    file: File,
+    maxWidth: number,
+    maxHeight: number,
+    quality: number
+  ) => {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          if (!ctx) {
+            reject(new Error("Canvas is not supported"));
+            return;
+          }
+
+          // アスペクト比を保持してリサイズ
+          let width = img.width;
+          let height = img.height;
+          if (width > maxWidth || height > maxHeight) {
+            const scale = Math.min(maxWidth / width, maxHeight / height);
+            width = Math.round(width * scale);
+            height = Math.round(height * scale);
+          }
+
+          // Canvasサイズを調整して描画
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // JPEGで圧縮（quality: 0.7 = 70%）
+          resolve(canvas.toDataURL("image/jpeg", quality));
+        };
+      };
+      reader.onerror = reject;
+    });
+  };
 
   const handleImageChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -24,36 +72,26 @@ function ControllerPlayingPlaying() {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    if (!selectedColor) {
+      messageApi.error("色の選択に失敗しました");
+      return;
+    }
+
     setInputFile(file);
     setInputFileString(URL.createObjectURL(file));
     setIsJudging(true);
 
     console.log("file", file);
-    // fileをbase64に変換
-    const base64Image = await new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        if (typeof reader.result !== "string") {
-          reject(new Error("reader.result is not string"));
-          return;
-        }
-        resolve(reader.result);
-      };
-      reader.onerror = () => {
-        reject(reader.error);
-      };
-    });
 
-    // data:image/png;base64,を削除
-    const base64ImageString = base64Image.split(",")[1];
-    console.log("今からpost!", base64ImageString);
+    const compressedBase64 = await compressImage(file, 800, 800, 0.7);
+    const base64ImageString = compressedBase64.split(",")[1];
 
     fetch("https://picolor-backend-python.onrender.com/controller/image", {
       method: "POST",
       body: JSON.stringify({
+        roomID: roomIDNum,
         userID: userIDNum,
-        colorID: 68,
+        colorID: selectedColor.ColorId,
         image: base64ImageString,
       }),
     })
@@ -63,7 +101,7 @@ function ControllerPlayingPlaying() {
           messageApi.error(res.statusText);
           setInputFileString(null);
           setInputFile(null);
-          setRank(null);
+          setPost(null);
           return;
         }
 
@@ -73,17 +111,23 @@ function ControllerPlayingPlaying() {
           messageApi.error("is_success is undefined");
           setInputFileString(null);
           setInputFile(null);
-          setRank(null);
+          setPost(null);
           return;
         }
         if (data.is_success) {
-          setRank(data.rank);
+          setPost({
+            colorCode: selectedColor.ColorCode,
+            rank: data.rank,
+            imagePath: inputFileString || "",
+          });
           messageApi.success("色の判定が完了しました！");
+
+          setPost;
           return;
         } else {
           setInputFileString(null);
           setInputFile(null);
-          setRank(null);
+          setPost(null);
           messageApi.error(data.error);
           return;
         }
@@ -93,7 +137,7 @@ function ControllerPlayingPlaying() {
         messageApi.error(err);
         setInputFileString(null);
         setInputFile(null);
-        setRank(null);
+        setPost(null);
       });
   };
 
@@ -143,48 +187,13 @@ function ControllerPlayingPlaying() {
             gap: "20px",
           })}
         >
-          <label
-            htmlFor="file-input"
-            className={css({
-              w: "20dvh",
-              h: "20dvh",
-              bg: "red",
-              borderRadius: "50%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            })}
-          >
-            <img src="/camera.svg" alt="カメラ" />
-          </label>
-          <label
-            htmlFor="file-input"
-            className={css({
-              w: "20dvh",
-              h: "20dvh",
-              bg: "blue",
-              borderRadius: "50%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            })}
-          >
-            <img src="/camera.svg" alt="カメラ" />
-          </label>
-          <label
-            htmlFor="file-input"
-            className={css({
-              w: "20dvh",
-              h: "20dvh",
-              bg: "green",
-              borderRadius: "50%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            })}
-          >
-            <img src="/camera.svg" alt="カメラ" />
-          </label>
+          {themeColors.map((themeColor) => (
+            <ColorInputCircle
+              key={themeColor.ColorId}
+              color={themeColor}
+              onClick={() => setSelectedColor(themeColor)}
+            />
+          ))}
         </div>
       ) : (
         <div
@@ -193,7 +202,7 @@ function ControllerPlayingPlaying() {
             display: "inline-block",
             w: "fit-content",
             h: "fit-content",
-            overflow: "hidden",
+            overflow: isJudging ? "hidden" : "visible",
           })}
         >
           <img
@@ -206,6 +215,11 @@ function ControllerPlayingPlaying() {
             alt="入力画像"
           />
           <div
+            style={{
+              background: `linear-gradient(to bottom, transparent 45%, ${
+                selectedColor ? selectedColor.ColorCode : "white"
+              } 50%, transparent 55%)`,
+            }}
             className={css({
               position: "absolute",
               bottom: "0",
@@ -213,11 +227,50 @@ function ControllerPlayingPlaying() {
               right: "0",
               h: "100%",
               w: "100%",
-              background: `linear-gradient(to bottom, transparent 45%, ${color} 50%, transparent 55%)`,
-              animation: "radar-scan 4s linear infinite",
+              animation: "radar-scan 2s linear infinite",
               opacity: isJudging ? "1" : "0",
             })}
           />
+          <div
+            className={css({
+              position: "absolute",
+              top: "0",
+              bottom: "0",
+              left: "0",
+              right: "0",
+            })}
+          >
+            <img
+              src={post ? CROWN_IMAGE_PATH[post.rank - 1] : ""}
+              alt=""
+              className={css({
+                w: "20dvh",
+                h: "15dvh",
+                position: "absolute",
+                transform: "rotate(40deg)",
+                float: "right",
+                top: "-15%",
+                right: "-15%",
+                zIndex: 1,
+                transition: "opacity 1s",
+                opacity: post ? 1 : 0,
+              })}
+            />
+            <div
+              style={{
+                backgroundColor: post ? post.colorCode : "white",
+              }}
+              className={css({
+                position: "absolute",
+                left: "0",
+                right: "0",
+                top: post ? "0%" : "100%",
+                bottom: "0",
+                transition: "top 1s",
+                zIndex: -2,
+            })}
+          />
+          </div>
         </div>
       )}
     </Form>

@@ -15,14 +15,16 @@ export function Rooms() {
   const [members, setMembers] = useState<string[]>([]);
   const currentBaseURL = window.location.origin;
 
-  const [url] = useState<string>(`${currentBaseURL}/PicoloR-frontend-farm/controller/join?roomID=${roomId}`);
+  const [url] = useState<string>(
+    `${currentBaseURL}/PicoloR-frontend-farm/controller/join?roomID=${roomId}`
+  );
 
   useEffect(() => {
     const fetchMembers = async () => {
       const { data: members, error } = await supabase
         .from("room_members")
         .select("user_id")
-        .eq("room_id", roomId)
+        .eq("room_id", roomId);
       if (error) {
         console.error(error);
       } else if (members) {
@@ -41,8 +43,7 @@ export function Rooms() {
     };
 
     fetchMembers();
-  }
-    , [roomId]);
+  }, [roomId]);
 
   useEffect(() => {
     const channel = supabase
@@ -63,7 +64,7 @@ export function Rooms() {
                 .from("users")
                 .select("name")
                 .eq("id", payload.new.user_id)
-                .single()
+                .single();
               if (error) {
                 console.error(error);
               } else if (newMember) {
@@ -81,7 +82,7 @@ export function Rooms() {
   }, []);
 
   const onClickGameStart = async () => {
-    if(members.length < 2){
+    if (members.length < 2) {
       alert("2人以上でゲームを開始してください");
       return;
     }
@@ -95,41 +96,76 @@ export function Rooms() {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      console.log(response);
+
+      window.location.href = `/PicoloR-frontend-farm/room/${roomId}/hostUser`;
     } catch (err) {
       console.error("Fetch error:", err);
-    }finally{
-      // window.location.href = `/PicoloR-frontend-farm/room/${roomId}/hostUser`;
     }
-  }
+  };
 
   return (
     <>
       <Header mode={HeaderMode.GREEN} />
       <div className={css({ mt: "90px" })}>
-        <h1 className={flex({
-          display: "flex",
-          justify: "center",
-          fontSize: "2.5rem",
-          fontFamily: "M PLUS 1p",
-          color: "#4A4747"
-        })}>
+        <h1
+          className={flex({
+            display: "flex",
+            justify: "center",
+            fontSize: "2.5rem",
+            fontFamily: "M PLUS 1p",
+            color: "#4A4747",
+          })}
+        >
           スマホでQRを読み取って参加しよう！
         </h1>
-        <div className={flex({ display: "flex", w: "100%", justify: "center", mt: "25px" })}>
-          <div className={flex({ display: "flex", justify: "center", align: "center", mt: "20px", w: "40%", h: "100%" })}>
+        <div
+          className={flex({
+            display: "flex",
+            w: "100%",
+            justify: "center",
+            mt: "25px",
+          })}
+        >
+          <div
+            className={flex({
+              display: "flex",
+              justify: "center",
+              align: "center",
+              mt: "20px",
+              w: "40%",
+              h: "100%",
+            })}
+          >
             <QRCode url={url} />
           </div>
           <div className={flex({ width: "40%" })}>
             <BoxBorderedContainerWithTitle title="参加者一覧">
-              {members.length > 0 && (
-                <div className={flex({ display: "flex", justify: "center", fontSize: "3rem" })}>
-                  {members.length}人
-                </div>
-              )}
-              <ul className={flex({ p: "5px 20px", display: "flex", flexWrap: "wrap", listStyle: "none" })}>
+              <div
+                className={flex({
+                  display: "flex",
+                  justify: "center",
+                  fontSize: "3rem",
+                })}
+              >
+                {members.length}人
+              </div>
+              <ul
+                className={flex({
+                  p: "5px 20px",
+                  display: "flex",
+                  flexWrap: "wrap",
+                  listStyle: "none",
+                })}
+              >
                 {members.map((member) => (
-                  <li key={member} className={css({ display: "inline", p: "5px 20px", fontSize: "1rem" })}>
+                  <li
+                    key={member}
+                    className={css({
+                      display: "inline",
+                      p: "5px 20px",
+                      fontSize: "1rem",
+                    })}
+                  >
                     {member}
                   </li>
                 ))}
@@ -137,8 +173,21 @@ export function Rooms() {
             </BoxBorderedContainerWithTitle>
           </div>
         </div>
-        <div className={flex({ display: "flex", justify: "center", m: "0 auto", mt: "20px", w: "480px", h: "83px" })}>
-          <Button type={ButtonMode.GREEN} text="GAME START" onClick={onClickGameStart} />
+        <div
+          className={flex({
+            display: "flex",
+            justify: "center",
+            m: "0 auto",
+            mt: "20px",
+            w: "480px",
+            h: "83px",
+          })}
+        >
+          <Button
+            type={ButtonMode.GREEN}
+            text="GAME START"
+            onClick={onClickGameStart}
+          />
         </div>
       </div>
     </>
