@@ -168,20 +168,7 @@ export function ControllerPlaying() {
           console.log("payload", payload);
           if (payload.eventType === "INSERT") {
             if (payload.new?.room_id === roomIDNum) {
-              if (!themeColors) {
-                return;
-              }
-              setThemeColors((prevThemeColors) => {
-                if (!prevThemeColors) {
-                  return prevThemeColors;
-                }
-                return prevThemeColors.map((themeColor) => {
-                  if (themeColor.ColorId === payload.new?.color_id) {
-                    return { ...themeColor, isPosted: true };
-                  }
-                  return themeColor;
-                });
-              });
+              await getThemeColors();
             }
           }
         }

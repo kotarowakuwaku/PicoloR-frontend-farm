@@ -28,6 +28,7 @@ const ColorInputCircle: React.FC<ColorInputCircleProps> = ({
         opacity: color.isPosted ? 0.5 : 1,
         filter: color.isPosted ? "saturate(0.5)" : "saturate(1)",
         boxShadow: "0 8px 8px rgba(0,0,0,0.25)",
+        transition: "all 0.3s",
       })}
       onClick={color.isPosted ? undefined : onClick}
       aria-disabled={color.isPosted}
