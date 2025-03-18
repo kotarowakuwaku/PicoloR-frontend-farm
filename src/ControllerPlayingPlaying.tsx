@@ -1,4 +1,4 @@
-import { Form } from "antd";
+import { Form, message } from "antd";
 import { css } from "../styled-system/css";
 import { useEffect, useState } from "react";
 
@@ -7,6 +7,8 @@ function ControllerPlayingPlaying() {
   const [selectedColor, setSelectedColor] = useState<number | null>(null);
   const [inputFileString, setInputFileString] = useState<string | null>(null);
   const [inputFile, setInputFile] = useState<File | null>(null);
+  const [rank, setRank] = useState<number | null>(null);
+  const [messageApi, contextHolder] = message.useMessage();
 
   const url = new URL(window.location.href);
   const roomID = url.searchParams.get("roomID");
@@ -14,7 +16,7 @@ function ControllerPlayingPlaying() {
   const userID = url.searchParams.get("userID");
   const userIDNum = Number(userID);
 
-  const color = "#ff0000";
+  const color = "#ffff00";
 
   const handleImageChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -45,29 +47,56 @@ function ControllerPlayingPlaying() {
 
     // data:image/png;base64,を削除
     const base64ImageString = base64Image.split(",")[1];
-
     console.log("今からpost!", base64ImageString);
-    const res = await fetch(
-      "https://picolor-backend-python.onrender.com/controller/image",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          userID: userIDNum,
-          colorID: 10,
-          image: base64ImageString,
-        }),
-      }
-    )
+
+    // fetch("https://picolor-backend-python.onrender.com/controller/image", {
+    // fetch("http://172.20.10.2:8000/controller/image", {
+    fetch("http://192.168.179.12:8000/controller/image", {
+      method: "POST",
+      body: JSON.stringify({
+        userID: userIDNum,
+        colorID: 68,
+        image: base64ImageString,
+      }),
+    })
       .then(async (res) => {
-        return await res.json();
+        setIsJudging(false);
+        if (!res.ok) {
+          messageApi.error(res.statusText);
+          setInputFileString(null);
+          setInputFile(null);
+          setRank(null);
+          return;
+        }
+
+        const data = await res.json();
+        console.log(data);
+        if (data.is_success === undefined) {
+          messageApi.error("is_success is undefined");
+          setInputFileString(null);
+          setInputFile(null);
+          setRank(null);
+          return;
+        }
+        if (data.is_success) {
+          setRank(data.rank);
+          messageApi.success("色の判定が完了しました！");
+          return;
+        } else {
+          setInputFileString(null);
+          setInputFile(null);
+          setRank(null);
+          messageApi.error(data.error);
+          return;
+        }
       })
       .catch((err) => {
-        throw new Error(err);
+        setIsJudging(false);
+        messageApi.error(err);
+        setInputFileString(null);
+        setInputFile(null);
+        setRank(null);
       });
-
-    setIsJudging(false);
-
-    console.log(res);
   };
 
   useEffect(() => {
@@ -91,6 +120,7 @@ function ControllerPlayingPlaying() {
         justifyContent: "center",
       }}
     >
+      {contextHolder}
       {/* 画像ファイル入力欄 */}
       <Form.Item name="image" valuePropName="pic">
         <input
@@ -185,8 +215,9 @@ function ControllerPlayingPlaying() {
               right: "0",
               h: "100%",
               w: "100%",
-              background: `linear-gradient(to bottom, transparent 20%, ${color} 50%, transparent 80%)`,
+              background: `linear-gradient(to bottom, transparent 45%, ${color} 50%, transparent 55%)`,
               animation: "radar-scan 4s linear infinite",
+              opacity: isJudging ? "1" : "0",
             })}
           />
         </div>
