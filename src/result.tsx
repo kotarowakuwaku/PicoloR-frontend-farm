@@ -65,7 +65,7 @@ export function Result() {
             } catch (err) {
                 console.error("Fetch error:", err);
             } finally {
-                // window.location.href = `/PicoloR-frontend-farm/room/${roomId}`;
+                window.location.href = `/PicoloR-frontend-farm/room/${roomId}`;
             }
 
         }
@@ -88,12 +88,10 @@ export function Result() {
                 if (!deleteUserColor.ok) {
                     throw new Error(`HTTP error! status: ${deleteUserColor.status}`);
                 }
-                //rooms
 
             } catch (err) {
                 console.error("Fetch error:", err);
             } finally {
-                // window.location.href = `/PicoloR-frontend-farm/`;
                 try {
                     const deleteRoom = await fetch(
                         `https://picolor-backend-go.onrender.com/host/room?roomID=${roomId}`,
@@ -107,7 +105,7 @@ export function Result() {
                 } catch (err) {
                     console.error("Fetch error:", err);
                 } finally {
-                    // window.location.href = `/PicoloR-frontend-farm/`;
+                    window.location.href = `/PicoloR-frontend-farm/`;
                 }
             }
         }
