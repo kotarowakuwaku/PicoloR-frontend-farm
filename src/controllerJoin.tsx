@@ -104,7 +104,7 @@ export function ControllerJoin() {
           throw new Error(`HTTP error! status: ${joinRoomRes.status}`);
         }
     
-        window.location.href = `/controller/?roomID=${roomID}&userID=${userID}`;
+        window.location.href = `/PicoloR-frontend-farm/controller/?roomID=${roomID}&userID=${userID}`;
       } catch (err) {
         console.error("エラー:", err);
       }
