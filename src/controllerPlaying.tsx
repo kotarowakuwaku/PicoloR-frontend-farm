@@ -187,11 +187,11 @@ export function ControllerPlaying() {
     >
       <Header mode={HeaderMode.GREEN} />
       {/* currentModeによって切り替える */}
-      {/* {currentMode === CONTROLLER_PLAYING_MODE.WAITING && (
+      {currentMode === CONTROLLER_PLAYING_MODE.WAITING && (
         <ControllerPlayingWaiting />
       )}
       {currentMode === CONTROLLER_PLAYING_MODE.PLAYING && (
-        <ControllerPlayingPlaying />
+        <ControllerPlayingPlaying themeColors={themeColors} />
       )}
       {currentMode === CONTROLLER_PLAYING_MODE.CLEARED && (
         <div>
@@ -202,25 +202,7 @@ export function ControllerPlaying() {
         <div>
           <h1>FINISHED</h1>
         </div>
-      )} */}
-
-      {themeColors &&
-        themeColors.map((color) => (
-          <div
-            key={color.ColorID}
-            style={{ backgroundColor: color.ColorCode }}
-            className={css({
-              w: "20dvh",
-              h: "20dvh",
-              borderRadius: "50%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            })}
-          >
-            <img src="/camera.svg" alt="カメラ" />
-          </div>
-        ))}
+      )}
 
       <UserName userName={userID} />
     </main>

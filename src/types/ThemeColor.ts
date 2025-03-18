@@ -1,4 +1,4 @@
 export default interface ThemeColor {
-  ColorID: number;
+  ColorId: number;
   ColorCode: string;
 }
