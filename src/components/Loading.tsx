@@ -1,5 +1,4 @@
 import { ConfigProvider, Modal } from "antd";
-import "../styles/loading.css";
 import { css } from "../../styled-system/css";
 
 
