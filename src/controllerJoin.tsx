@@ -43,6 +43,37 @@ export function ControllerJoin() {
   const roomID = url.searchParams.get("roomID");
   const roomIDNum = Number(roomID);
 
+  if (!roomID) {
+    return (
+      <main
+        className={css({
+          h: "100dvh",
+          w: "100dvw",
+          p: "10px 30px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+          alignItems: "center",
+        })}
+      >
+        <Header mode={HeaderMode.GREEN} />
+
+        <p
+          className={css({
+            fontSize: "1.2rem",
+            fontWeight: "bold",
+            color: "red",
+            textAlign: "center",
+          })}
+        >
+          roomID が存在しません。
+          <br />
+          正しい画面に接続してください。
+        </p>
+      </main>
+    );
+  }
+
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
     async function createUserAndRoom() {
       try {
@@ -73,7 +104,7 @@ export function ControllerJoin() {
           throw new Error(`HTTP error! status: ${joinRoomRes.status}`);
         }
     
-        window.location.href = `/controller/?roomID=${roomID}&userID=${userID}`;
+        window.location.href = `/PicoloR-frontend-farm/controller/?roomID=${roomID}&userID=${userID}`;
       } catch (err) {
         console.error("エラー:", err);
       }
