@@ -61,7 +61,7 @@ export function GameHost() {
     console.log("timestampz", timestampz);
     try {
       const response = await fetch(
-        `https://picolor-backend-go.onrender.com//host/room/start`,
+        `https://picolor-backend-go.onrender.com/host/room/start`,
         {
           method: "POST",
           headers: {
