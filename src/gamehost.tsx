@@ -86,6 +86,7 @@ export function GameHost() {
     // };
 
     // fetchPostData();
+
     fetchThemeColors();
   }, [roomId]);
 
@@ -103,7 +104,6 @@ export function GameHost() {
 
         async (payload) => {
           if (payload.eventType === "INSERT") {
-            console.log("hogee000000", payload.new);
             setPayloadNew((prev) => [payload.new as PayloadNew, ...prev]);
 
             if (payload.new?.room_id === Number(roomId)) {
@@ -115,7 +115,6 @@ export function GameHost() {
               if (error) {
                 console.error(error);
               } else if (Data) {
-                // console.log(Data);
               }
             }
           }
@@ -143,38 +142,30 @@ export function GameHost() {
           padding: "0 15vw",
         })}
       >
-        {themeColors.map((colorObj, index) => (
-          <ColorCircle
-            key={index}
-            color={colorObj.ColorCode}
-            delay={index * 1.0}
-            imageURL={
-              payloadNew?.find((item) => item.color_id === colorObj.ColorId)
-                ?.image || ""
-            }
-            // rank={payloadNew?.rank}
-            onAnimationComplete={
-              index === 2 ? () => setModalVisible(true) : undefined
-            }
-          />
-        ))}
-
-        {/* <ColorCircle
-            key={index}
-            color={themeColor}
-            delay={index * 1.0}
-            imageURL={
-              mockResponse?.find((item) => item.themeColor === themeColor)
-                ?.imageURL || ""
-            }
-            rank={
-              mockResponse?.find((item) => item.themeColor === themeColor)
-                ?.rank || 0
-            }
-            onAnimationComplete={
-              index === 2 ? () => setModalVisible(true) : undefined
-            } 
-          />*/}
+        {/* const decoededImage = `data:image/jpeg;base64,${Image}`; */}
+        {themeColors.map((colorObj, index) => {
+          const foundItem = payloadNew?.find(
+            (item) => item.color_id === colorObj.ColorId
+          );
+          console.log("foundItem", foundItem);
+          return (
+            <ColorCircle
+              key={index}
+              color={colorObj.ColorCode}
+              delay={index * 1.0}
+              imageURL={
+                foundItem ? `data:image/jpeg;base64,${foundItem?.image}` : ""
+              }
+              rank={
+                payloadNew?.find((item) => item.color_id === colorObj.ColorId)
+                  ?.rank || 0
+              }
+              onAnimationComplete={
+                index === 2 ? () => setModalVisible(true) : undefined
+              }
+            />
+          );
+        })}
       </div>
       {modalVisible && <CountDownModal visible={true} count={count} />}
       <div

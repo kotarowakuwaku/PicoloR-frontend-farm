@@ -22,6 +22,7 @@ export const ColorCircle: React.FC<ColorCircleProps> = ({
 }) => {
   console.log("rank", rank);
   console.log("passedthemeColor", color);
+  console.log("imageURL", imageURL);
   const rankImage = () => {
     switch (rank) {
       case 1:
