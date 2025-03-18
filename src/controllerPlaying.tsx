@@ -1,7 +1,7 @@
 import { css } from "../styled-system/css";
 import Header from "./components/Header";
 import { HeaderMode } from "./types/HeaderMode";
-import { CONTROLLER_PLAYING_MODE } from "./const";
+import { CONTROLLER_PLAYING_MODE } from "./types/ControllerPlayingMode";
 import { useEffect, useState } from "react";
 import ControllerPlayingWaiting from "./ControllerPlayingWaiting";
 import ControllerPlayingPlaying from "./ControllerPlayingPlaying";
@@ -12,7 +12,7 @@ export function ControllerPlaying() {
   const [currentMode, setCurrentMode] = useState<CONTROLLER_PLAYING_MODE>(
     CONTROLLER_PLAYING_MODE.WAITING
   );
-
+  const [themeColors, setThemeColors] = useState<string[]>([]);
   const url = new URL(window.location.href);
   const roomID = url.searchParams.get("roomID");
   const roomIDNum = Number(roomID);
