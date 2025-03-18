@@ -16,7 +16,9 @@ const Stopwatch: React.FC<StopwatchDisplayProps> = ({ time }) => {
         marginTop: "2rem",
       }}
     >
-      {time >= 60 ? `${minutes}:${seconds}` : `${time}`}
+      {time >= 60
+        ? `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`
+        : `${time}`}
     </div>
   );
 };
