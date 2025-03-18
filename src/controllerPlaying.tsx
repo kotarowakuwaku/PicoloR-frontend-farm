@@ -447,6 +447,7 @@ export function ControllerPlaying() {
         flexDirection: "column",
         justifyContent: "space-evenly",
         alignItems: "center",
+        overflow: "hidden",
       })}
     >
       <Header mode={HeaderMode.GRAY} />

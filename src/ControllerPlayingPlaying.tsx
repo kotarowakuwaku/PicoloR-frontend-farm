@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ThemeColor, { ThemeColorsWithIsPosted } from "./types/ThemeColor";
 import ColorInputCircle from "./components/ColorInputCircle";
 import Post from "./types/Post";
+import { CROWN_IMAGE_PATH } from "./const";
 
 function ControllerPlayingPlaying({
   themeColors,
@@ -230,21 +231,46 @@ function ControllerPlayingPlaying({
               opacity: isJudging ? "1" : "0",
             })}
           />
-          <img
-            src="/first_place.png"
-            alt="王冠"
+          <div
             className={css({
               position: "absolute",
-              top: "-50px",
-              right: "-50px",
-              w: "100px",
-              h: "100px",
-              transform: "rotate(45deg)",
-              transition: "opacity 0.5s",
-              opacity: post?.rank === 1 ? "1" : "0",
-              zIndex: 2,
+              top: "0",
+              bottom: "0",
+              left: "0",
+              right: "0",
+            })}
+          >
+            <img
+              src={post ? CROWN_IMAGE_PATH[post.rank - 1] : ""}
+              alt=""
+              className={css({
+                w: "20dvh",
+                h: "15dvh",
+                position: "absolute",
+                transform: "rotate(40deg)",
+                float: "right",
+                top: "-15%",
+                right: "-15%",
+                zIndex: 1,
+                transition: "opacity 1s",
+                opacity: post ? 1 : 0,
+              })}
+            />
+            <div
+              style={{
+                backgroundColor: post ? post.colorCode : "white",
+              }}
+              className={css({
+                position: "absolute",
+                left: "0",
+                right: "0",
+                top: post ? "0%" : "100%",
+                bottom: "0",
+                transition: "top 1s",
+                zIndex: -2,
             })}
           />
+          </div>
         </div>
       )}
     </Form>
