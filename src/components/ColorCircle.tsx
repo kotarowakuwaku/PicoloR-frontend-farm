@@ -7,10 +7,11 @@ interface ColorCircleProps {
   delay: number;
   imageURL?: string;
   rank?: number;
+  name?: string;
 
   onAnimationComplete?: () => void;
 }
-const TestImage = "/test.png";
+// const TestImage = "/test.png";
 
 export const ColorCircle: React.FC<ColorCircleProps> = ({
   color,
@@ -20,6 +21,7 @@ export const ColorCircle: React.FC<ColorCircleProps> = ({
   onAnimationComplete,
 }) => {
   console.log("rank", rank);
+  console.log("passedthemeColor", color);
   const rankImage = () => {
     switch (rank) {
       case 1:
@@ -32,25 +34,25 @@ export const ColorCircle: React.FC<ColorCircleProps> = ({
         return "";
     }
   };
-  imageURL = TestImage;
+  // imageURL = TestImage;
   return (
     <div style={{ position: "relative", width: "20vw", height: "20vw" }}>
-      <img
-        src={rankImage()}
-        alt=""
-        className={css({
-          w: "50%",
-          h: "40%",
-          position: "absolute",
-          transform: "rotate(40deg)",
-          float: "right",
-          top: "-15%",
-          right: "-15%",
-          zIndex: 1,
-        })}
-      />
       {imageURL ? (
         <div style={{ position: "relative", width: "20vw", height: "20vw" }}>
+          <img
+            src={rankImage()}
+            alt=""
+            className={css({
+              w: "50%",
+              h: "40%",
+              position: "absolute",
+              transform: "rotate(40deg)",
+              float: "right",
+              top: "-15%",
+              right: "-15%",
+              zIndex: 1,
+            })}
+          />
           <div
             style={{
               position: "absolute",
@@ -64,7 +66,7 @@ export const ColorCircle: React.FC<ColorCircleProps> = ({
             }}
           ></div>
           <img
-            src="/test.png"
+            src={imageURL}
             alt="Test Image"
             style={{
               position: "absolute",
