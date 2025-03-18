@@ -19,11 +19,39 @@ export function ControllerPlaying() {
     ThemeColorsWithIsPosted[] | null
   >(null);
   const [userName, setUserName] = useState<string | null>(null);
-  console.log("themeColors", themeColors);
+
   const url = new URL(window.location.href);
   const roomID = url.searchParams.get("roomID");
   const roomIDNum = Number(roomID);
   const userID = url.searchParams.get("userID");
+
+  async function getIsCleared() {
+    const { data: fetchedPost, error } = await supabase
+      .from("posts")
+      .select("color_id, user_id")
+      .eq("room_id", roomIDNum);
+    if (error) {
+      console.error("error", error);
+      return null;
+    }
+    if (!fetchedPost) {
+      console.error("data is null");
+      return null;
+    }
+
+    const isPosted =
+      userID &&
+      fetchedPost.some(
+        (post: { color_id: number; user_id: number }) =>
+          `${post.user_id}` === userID
+      );
+
+    if (isPosted) {
+      setCurrentMode(CONTROLLER_PLAYING_MODE.CLEARED);
+    }
+
+    return fetchedPost;
+  }
 
   async function getThemeColors() {
     const res = await fetch(
@@ -36,22 +64,14 @@ export function ControllerPlaying() {
       throw new Error(`HTTP error! status: ${res.status}`);
     }
     const data = await res.json();
-    console.log(data);
     const fetchedThemeColors = data.themeColors;
 
-    const { data: fetchedPost, error } = await supabase
-      .from("posts")
-      .select("color_id")
-      .eq("room_id", roomIDNum);
-    if (error) {
-      console.error("error", error);
-      return;
-    }
+    const fetchedPost = await getIsCleared();
+
     if (!fetchedPost) {
-      console.error("data is null");
       return;
     }
-    console.log(fetchedPost);
+
     const fetchedThemeColorsWithIsPosted = fetchedThemeColors.map(
       (themeColor: ThemeColor) => {
         const isPosted = fetchedPost.some(
@@ -80,8 +100,11 @@ export function ControllerPlaying() {
               const isStart = payload.new?.is_start;
               const isFinish = payload.new?.is_finish;
               switch (true) {
+                case currentMode === CONTROLLER_PLAYING_MODE.CLEARED:
+                  break;
                 case isFinish:
-                  window.location.href = `/result?roomID=${roomID}&userID=${userID}`;
+                  setCurrentMode(CONTROLLER_PLAYING_MODE.FINISHED);
+                  await getIsCleared();
                   break;
                 case isStart:
                   if (currentMode === CONTROLLER_PLAYING_MODE.WAITING) {
@@ -112,6 +135,14 @@ export function ControllerPlaying() {
           console.log("payload", payload);
           if (payload.eventType === "INSERT") {
             if (payload.new?.room_id === roomIDNum) {
+              if (!themeColors) {
+                return;
+              }
+              if (payload.new?.user_id === userID) {
+                if (currentMode !== CONTROLLER_PLAYING_MODE.CLEARED) {
+                  setCurrentMode(CONTROLLER_PLAYING_MODE.CLEARED);
+                }
+              }
               setThemeColors((prevThemeColors) => {
                 if (!prevThemeColors) {
                   return prevThemeColors;
@@ -149,12 +180,12 @@ export function ControllerPlaying() {
         console.error("data is null");
         return;
       }
-      console.log(data);
       const isStart = data[0].is_start;
       const isFinish = data[0].is_finish;
       switch (true) {
         case isFinish:
-          window.location.href = `/result?roomID=${roomID}&userID=${userID}`;
+          setCurrentMode(CONTROLLER_PLAYING_MODE.FINISHED);
+          await getIsCleared();
           break;
         case isStart:
           await getThemeColors();
@@ -179,7 +210,6 @@ export function ControllerPlaying() {
         console.error("data is null");
         return;
       }
-      console.log(data);
       setUserName(data.name);
     };
 
@@ -295,6 +325,64 @@ export function ControllerPlaying() {
     );
   }
 
+  if (currentMode === CONTROLLER_PLAYING_MODE.FINISHED) {
+    return (
+      <main
+        className={css({
+          h: "100dvh",
+          w: "100dvw",
+          p: "10px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+          alignItems: "center",
+        })}
+      >
+        <Header mode={HeaderMode.GRAY} />
+        <p
+          className={css({
+            fontSize: "4rem",
+            fontWeight: "bold",
+            color: "var(--dark)",
+            WebkitTextStroke: "1px var(--secondary)",
+          })}
+        >
+          LOSE
+        </p>
+        <UserName userName={userName || "unknown controller"} />
+      </main>
+    );
+  }
+
+  if (currentMode === CONTROLLER_PLAYING_MODE.CLEARED) {
+    return (
+      <main
+        className={css({
+          h: "100dvh",
+          w: "100dvw",
+          p: "10px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+          alignItems: "center",
+        })}
+      >
+        <Header mode={HeaderMode.GRAY} />
+        <p
+          className={css({
+            fontSize: "4rem",
+            fontWeight: "bold",
+            color: "var(--dark)",
+            WebkitTextStroke: "1px var(--secondary)",
+          })}
+        >
+          CLEAR
+        </p>
+        <UserName userName={userName || "unknown controller"} />
+      </main>
+    );
+  }
+
   if (!themeColors || themeColors.length === 0) {
     return (
       <main
@@ -339,7 +427,10 @@ export function ControllerPlaying() {
       })}
     >
       <Header mode={HeaderMode.GRAY} />
-      <ControllerPlayingPlaying themeColors={themeColors} />
+      <ControllerPlayingPlaying
+        themeColors={themeColors}
+        setCurrentMode={setCurrentMode}
+      />
 
       <UserName userName={userName || "unknown controller"} />
     </main>

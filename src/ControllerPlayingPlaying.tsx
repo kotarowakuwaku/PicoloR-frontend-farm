@@ -3,11 +3,14 @@ import { css } from "../styled-system/css";
 import { useEffect, useState } from "react";
 import ThemeColor, { ThemeColorsWithIsPosted } from "./types/ThemeColor";
 import ColorInputCircle from "./components/ColorInputCircle";
+import { CONTROLLER_PLAYING_MODE } from "./types/ControllerPlayingMode";
 
 function ControllerPlayingPlaying({
   themeColors,
+  setCurrentMode,
 }: {
   themeColors: ThemeColorsWithIsPosted[];
+  setCurrentMode: (mode: CONTROLLER_PLAYING_MODE) => void;
 }) {
   const [isJudging, setIsJudging] = useState(false);
   const [selectedColor, setSelectedColor] = useState<ThemeColor | null>(null);
@@ -115,6 +118,7 @@ function ControllerPlayingPlaying({
         if (data.is_success) {
           setRank(data.rank);
           messageApi.success("色の判定が完了しました！");
+          setCurrentMode(CONTROLLER_PLAYING_MODE.CLEARED);
           return;
         } else {
           setInputFileString(null);
