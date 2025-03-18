@@ -38,10 +38,7 @@ export function ControllerPlaying() {
               const isFinish = payload.new?.is_finish;
               switch (true) {
                 case isFinish:
-                  setCurrentMode(CONTROLLER_PLAYING_MODE.FINISHED);
-                  break;
-                case currentMode === CONTROLLER_PLAYING_MODE.CLEARED:
-                  setCurrentMode(CONTROLLER_PLAYING_MODE.FINISHED);
+                  window.location.href = `/result?roomID=${roomID}&userID=${userID}`;
                   break;
                 case isStart:
                   setCurrentMode(CONTROLLER_PLAYING_MODE.PLAYING);
@@ -76,8 +73,37 @@ export function ControllerPlaying() {
       console.log(data);
       setThemeColors(data.themeColors);
     }
+    const getCurrentPlayingMode = async () => {
+      const { data, error } = await supabase
+        .from("rooms")
+        .select("is_start, is_finish")
+        .eq("id", roomIDNum);
+      if (error) {
+        console.error("error", error);
+        return;
+      }
+      if (!data) {
+        console.error("data is null");
+        return;
+      }
+      console.log(data);
+      const isStart = data[0].is_start;
+      const isFinish = data[0].is_finish;
+      switch (true) {
+        case isFinish:
+          window.location.href = `/result?roomID=${roomID}&userID=${userID}`;
+          break;
+        case isStart:
+          setCurrentMode(CONTROLLER_PLAYING_MODE.PLAYING);
+          break;
+        default:
+          setCurrentMode(CONTROLLER_PLAYING_MODE.WAITING);
+          break;
+      }
+    };
 
     getThemeColors();
+    getCurrentPlayingMode();
   }, []);
 
   if (!roomID) {
@@ -192,16 +218,6 @@ export function ControllerPlaying() {
       )}
       {currentMode === CONTROLLER_PLAYING_MODE.PLAYING && (
         <ControllerPlayingPlaying themeColors={themeColors} />
-      )}
-      {currentMode === CONTROLLER_PLAYING_MODE.CLEARED && (
-        <div>
-          <h1>CLEARED</h1>
-        </div>
-      )}
-      {currentMode === CONTROLLER_PLAYING_MODE.FINISHED && (
-        <div>
-          <h1>FINISHED</h1>
-        </div>
       )}
 
       <UserName userName={userID} />
