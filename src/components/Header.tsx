@@ -13,7 +13,7 @@ const Header: React.FC<HeaderProps> = ({ mode }) => {
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Londrina+Solid&display=swap');
-
+ 
         .header {
           font-size: 4rem;
           padding: 0 1rem;
