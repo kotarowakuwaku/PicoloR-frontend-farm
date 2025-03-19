@@ -1,9 +1,6 @@
 import { css } from "../styled-system/css";
 import BoxBorderedContainerWithTitle from "./components/BoxBorderedContainerWithTitle";
 import ExplainItem from "./components/ExplainItem";
-import tab_color from "./assets/tab_color.svg";
-import capture_color from "./assets/capture_color.svg";
-import picture_passed from "./assets/picture_passed.svg";
 
 function ControllerPlayingWaiting() {
   return (
@@ -44,21 +41,21 @@ function ControllerPlayingWaiting() {
           <ExplainItem
             id="tap_color"
             text="1. 撮影するテーマカラーを選択する"
-            iconPath={tab_color}
+            iconPath={"/tab_color.svg"}
             alt="PCとスマホのイラスト"
             isMobile
           />
           <ExplainItem
             id="capture_color"
             text="2. 起動したカメラで撮影する"
-            iconPath={capture_color}
+            iconPath={"/capture_color."}
             alt="起動したカメラで撮影するイラスト"
             isMobile
           />
           <ExplainItem
             id="picture_passed"
             text="3. 送信！先に判定が通れば勝利！"
-            iconPath={picture_passed}
+            iconPath={"/picture_passed.svg"}
             alt="判定OKが出たイラスト"
             isMobile
           />
