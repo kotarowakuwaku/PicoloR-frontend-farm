@@ -129,7 +129,7 @@ export function ControllerJoin() {
           console.error(error);
         }
 
-        // window.location.href = `/PicoloR-frontend-farm/controller/?roomID=${roomID}&userID=${userID}`;
+        window.location.href = `/PicoloR-frontend-farm/controller/?roomID=${roomID}&userID=${userID}`;
       } catch (err) {
         console.error("エラー:", err);
       }

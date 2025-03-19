@@ -1,9 +1,10 @@
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Main } from "./main";
-import { Rooms } from "./room"; // 新しく作成したTestコンポーネント
-import { GameHost } from "./gamehost"; // 新しく作成したTestコンポーネント
+import { Rooms } from "./room";
+import { GameHost } from "./gamehost";
 import { Result } from "./result";
+import { Test } from "./test";
 import "./index.css";
 import "../styled-system/styles.css";
 import { ControllerJoin } from "./controllerJoin";
@@ -15,23 +16,13 @@ const root = createRoot(container);
 root.render(
   <BrowserRouter>
     <Routes>
-      <Route path="PicoloR-frontend-farm/" element={<Main />} />
-
-
-      <Route path="PicoloR-frontend-farm/room/:roomId" element={<Rooms />} />
-      <Route
-        path="PicoloR-frontend-farm/controller/join"
-        element={<ControllerJoin />}
-
-      />
-      <Route
-        path="PicoloR-frontend-farm/controller"
-        element={<ControllerPlaying />}
-      />
-      <Route path="PicoloR-frontend-farm/result/:roomId" element={<Result />} />
-      <Route
-        path="PicoloR-frontend-farm/room/:roomId/hostUser"
-        element={<GameHost />}/>
+      <Route path="/" element={<Main />} />
+      <Route path="/test" element={<Test />} />
+      <Route path="/room/:roomId" element={<Rooms />} />
+      <Route path="/controller/join" element={<ControllerJoin />} />
+      <Route path="/controller" element={<ControllerPlaying />} />
+      <Route path="/result/:roomId" element={<Result />} />
+      <Route path="/room/:roomId/hostUser" element={<GameHost />} />
     </Routes>
   </BrowserRouter>
 );
