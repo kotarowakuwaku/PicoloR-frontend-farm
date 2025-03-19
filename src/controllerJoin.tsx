@@ -6,6 +6,7 @@ import { HeaderMode } from "./types/HeaderMode";
 import { createStyles } from "antd-style";
 import SelectIconButtons from "./components/SelectIconButtons";
 import { useState } from "react";
+import { supabase } from "./supabase/supabase";
 
 type FieldType = {
   username?: string;
@@ -88,7 +89,7 @@ export function ControllerJoin() {
     async function createUserAndRoom() {
       try {
         const userRes = await fetch(
-          "https://picolor-backend-go.onrender.com/controller/user",
+          `https://picolor-backend-${selectedIcon}.onrender.com/controller/user`,
           {
             method: "POST",
             body: JSON.stringify({
@@ -106,7 +107,7 @@ export function ControllerJoin() {
         console.log(userID);
 
         const joinRoomRes = await fetch(
-          "https://picolor-backend-go.onrender.com/controller/room",
+          `https://picolor-backend-${selectedIcon}.onrender.com/controller/room`,
           {
             method: "POST",
             body: JSON.stringify({
@@ -119,8 +120,15 @@ export function ControllerJoin() {
         if (!joinRoomRes.ok) {
           throw new Error(`HTTP error! status: ${joinRoomRes.status}`);
         }
+        const { error } = await supabase
+          .from("tecks")
+          .insert({ teck_id: selectedIcon, userID: userID });
 
-        window.location.href = `/PicoloR-frontend-farm/controller/?roomID=${roomID}&userID=${userID}&icon=${selectedIcon}`;
+        if (error) {
+          console.error(error);
+        }
+
+        // window.location.href = `/PicoloR-frontend-farm/controller/?roomID=${roomID}&userID=${userID}`;
       } catch (err) {
         console.error("エラー:", err);
       }
