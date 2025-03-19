@@ -1,8 +1,6 @@
 import React from "react";
 import { css } from "../../styled-system/css";
 import { ThemeColorsWithIsPosted } from "../types/ThemeColor";
-import verifyed from "../assets/verified.svg";
-import camera from "../assets/camera.svg";
 
 interface ColorInputCircleProps {
   color: ThemeColorsWithIsPosted;
@@ -40,7 +38,7 @@ const ColorInputCircle: React.FC<ColorInputCircleProps> = ({
           w: "60%",
           h: "60%",
         })}
-        src={color.isPosted ? verifyed : camera}
+        src={color.isPosted ? "/verified.svg" : "camera.svg"}
         alt="カメラ"
       />
     </label>

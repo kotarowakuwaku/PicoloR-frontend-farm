@@ -2,9 +2,6 @@ import React from 'react'
 import { flex } from '../../styled-system/patterns/flex'
 import { css } from '../../styled-system/css'
 import RankBarProps from '../types/RankBar'
-import first_place from "../assets/first_place.png";
-import second_place from "../assets/second_place.png";
-import third_place from "../assets/third_place.png";
 
 const RankBar: React.FC<RankBarProps> = ({
     Color,
@@ -16,11 +13,11 @@ const RankBar: React.FC<RankBarProps> = ({
     const rankImage = () => {
         switch (Rank) {
             case 1:
-                return first_place
+                return "/first_place.png"
             case 2:
-                return second_place
+                return "/second_place.png"
             case 3:
-                return third_place
+                return "/third_place.png"
             default:
                 return ""
         }

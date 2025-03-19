@@ -1,10 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { css } from "../../styled-system/css";
-import first_place from "../assets/first_place.png";
-import second_place from "../assets/second_place.png";
-import third_place from "../assets/third_place.png";
-
 interface ColorCircleProps {
   color: string;
   delay: number;
@@ -29,11 +25,11 @@ export const ColorCircle: React.FC<ColorCircleProps> = ({
   const rankImage = () => {
     switch (rank) {
       case 1:
-        return first_place;
+        return "/first_place.png";
       case 2:
-        return second_place;
+        return "/second_place.png";
       case 3:
-        return third_place;
+        return "/third_place.png";
       default:
         return "";
     }

@@ -3,13 +3,6 @@ import { css } from "../styled-system/css";
 import { createStyles } from "antd-style";
 import ExplainItem from "./components/ExplainItem";
 import BoxBorderedContainerWithTitle from "./components/BoxBorderedContainerWithTitle";
-import brash from "./assets/brash.svg";
-import palette from "./assets/palette.svg";
-import logo from "./assets/Logo.svg";
-import devices from "./assets/devices.svg";
-import laptop_colors from "./assets/laptop_colors.svg";
-import capture_color from "./assets/capture_color.svg";
-
 
 const useStyle = createStyles(() => ({
   homeButton: {
@@ -41,7 +34,7 @@ export function Main() {
         const data = await res.json();
         const roomID = data.roomID;
         console.log(roomID);
-        window.location.href = `/PicoloR-frontend-farm/room/${roomID}`;
+        window.location.href = `http://picolor-backet.s3-website-us-west-2.amazonaws.com/room/${roomID}`;
       })
       .catch((err) => {
         throw new Error(err);
@@ -61,7 +54,7 @@ export function Main() {
       })}
     >
       <img
-        src={brash}
+        src={"http://picolor-backet.s3-website-us-west-2.amazonaws.com/brash.svg"}
         alt=""
         className={css({
           position: "absolute",
@@ -73,7 +66,7 @@ export function Main() {
         })}
       />
       <img
-        src={palette}
+        src={"http://picolor-backet.s3-website-us-west-2.amazonaws.com/palette.svg"}
         alt=""
         className={css({
           position: "absolute",
@@ -124,7 +117,7 @@ export function Main() {
                 transform: "scale(1.2)",
               },
             })}
-            src={logo}
+            src={"http://picolor-backet.s3-website-us-west-2.amazonaws.com/Logo.svg"}
             alt="PicoloRロゴ"
           />
         </h1>
@@ -160,19 +153,19 @@ export function Main() {
           <ExplainItem
             id="devices"
             text="1. 人数分のスマホを登録"
-            iconPath={devices}
+            iconPath={"http://picolor-backet.s3-website-us-west-2.amazonaws.com/devices.svg"}
             alt="PCとスマホのイラスト"
           />
           <ExplainItem
             id="laptop_colors"
             text="2. テーマカラーの発表！"
-            iconPath={laptop_colors}
+            iconPath={"http://picolor-backet.s3-website-us-west-2.amazonaws.com/laptop_colors.svg"}
             alt="PCにテーマカラーが表示されるイラスト"
           />
           <ExplainItem
             id="capture_color"
             text="3. スマホでテーマ色の写真を撮影！"
-            iconPath={capture_color}
+            iconPath={"http://picolor-backet.s3-website-us-west-2.amazonaws.com/capture_color.svg"}
             alt="スマホでカラーを撮影するイラスト"
           />
         </ul>
