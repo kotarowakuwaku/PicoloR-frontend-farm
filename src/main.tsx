@@ -3,6 +3,13 @@ import { css } from "../styled-system/css";
 import { createStyles } from "antd-style";
 import ExplainItem from "./components/ExplainItem";
 import BoxBorderedContainerWithTitle from "./components/BoxBorderedContainerWithTitle";
+import brash from "./assets/brash.svg";
+import palette from "./assets/palette.svg";
+import logo from "./assets/Logo.svg";
+import devices from "./assets/devices.svg";
+import laptop_colors from "./assets/laptop_colors.svg";
+import capture_color from "./assets/capture_color.svg";
+
 
 const useStyle = createStyles(() => ({
   homeButton: {
@@ -54,7 +61,7 @@ export function Main() {
       })}
     >
       <img
-        src="/brash.svg"
+        src={brash}
         alt=""
         className={css({
           position: "absolute",
@@ -66,7 +73,7 @@ export function Main() {
         })}
       />
       <img
-        src="/palette.svg"
+        src={palette}
         alt=""
         className={css({
           position: "absolute",
@@ -117,7 +124,7 @@ export function Main() {
                 transform: "scale(1.2)",
               },
             })}
-            src="/Logo.svg"
+            src={logo}
             alt="PicoloRロゴ"
           />
         </h1>
@@ -153,19 +160,19 @@ export function Main() {
           <ExplainItem
             id="devices"
             text="1. 人数分のスマホを登録"
-            iconPath="/devices.svg"
+            iconPath={devices}
             alt="PCとスマホのイラスト"
           />
           <ExplainItem
             id="laptop_colors"
             text="2. テーマカラーの発表！"
-            iconPath="/laptop_colors.svg"
+            iconPath={laptop_colors}
             alt="PCにテーマカラーが表示されるイラスト"
           />
           <ExplainItem
             id="capture_color"
             text="3. スマホでテーマ色の写真を撮影！"
-            iconPath="/capture_color.svg"
+            iconPath={capture_color}
             alt="スマホでカラーを撮影するイラスト"
           />
         </ul>
