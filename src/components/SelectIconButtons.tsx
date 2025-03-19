@@ -16,14 +16,20 @@ const SelectIconButtons = ({ options, onChange }: SelectIconButtonsProps) => {
   };
 
   return (
-    <Space>
+    <Space
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        padding: "0 15px",
+      }}
+    >
       {options.map(({ id, imageURL }) => (
-            <IconButton
-              key={id}
-              imageURL={imageURL}
-              onClick={() => handleClick(id)}
-              selected={selectedId === id}
-            />
+        <IconButton
+          key={id}
+          imageURL={imageURL}
+          onClick={() => handleClick(id)}
+          selected={selectedId === id}
+        />
       ))}
     </Space>
   );

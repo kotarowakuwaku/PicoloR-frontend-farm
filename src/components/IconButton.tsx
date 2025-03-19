@@ -12,12 +12,17 @@ const IconButton = ({ imageURL, onClick, selected }: IconButtonProps) => {
     <Button
       type={selected ? "primary" : "default"} // ✅ 選択状態で色を変更
       shape="circle"
-      icon={<img src={imageURL} alt="" style={{ width: "80%", display:"flex", justifyContent:"center" }} />}
+      icon={
+        <img
+          src={imageURL}
+          alt=""
+          style={{ width: "70%", display: "flex", margin: "auto" }}
+        />
+      }
       onClick={onClick}
       style={{
-        width:"60px",
-        height:"60px",
-
+        width: "60px",
+        height: "60px",
       }}
     />
   );

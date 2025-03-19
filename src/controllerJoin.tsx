@@ -4,7 +4,7 @@ import { css } from "../styled-system/css";
 import Header from "./components/Header";
 import { HeaderMode } from "./types/HeaderMode";
 import { createStyles } from "antd-style";
-import  SelectIconButtons  from "./components/SelectIconButtons";
+import SelectIconButtons from "./components/SelectIconButtons";
 import { useState } from "react";
 
 type FieldType = {
@@ -46,9 +46,10 @@ export function ControllerJoin() {
   const roomIDNum = Number(roomID);
 
   const icons = [
-    { id: "1", imageURL: "/brash.svg" },
-    { id: "2", imageURL: "/devices.svg" },
-    { id: "3", imageURL: "/Logo.svg" },
+    { id: "1", imageURL: "/snake.png", name: "python" },
+    { id: "2", imageURL: "/gopher.png", name: "go" },
+    { id: "3", imageURL: "/swift-svgrepo-com.svg", name: "swift" },
+    { id: "4", imageURL: "/bird.png", name: "ts" },
   ];
 
   if (!roomID) {
@@ -85,39 +86,45 @@ export function ControllerJoin() {
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
     async function createUserAndRoom() {
       try {
-        const userRes = await fetch("https://picolor-backend-go.onrender.com/controller/user", {
-          method: "POST",
-          body: JSON.stringify({
-            userName: values.username,
-          }),
-        });
-    
+        const userRes = await fetch(
+          "https://picolor-backend-go.onrender.com/controller/user",
+          {
+            method: "POST",
+            body: JSON.stringify({
+              userName: values.username,
+            }),
+          }
+        );
+
         if (!userRes.ok) {
           throw new Error(`HTTP error! status: ${userRes.status}`);
         }
-    
+
         const userData = await userRes.json();
         const userID = userData.userID; // ここで取得
         console.log(userID);
-    
-        const joinRoomRes = await fetch("https://picolor-backend-go.onrender.com/controller/room", {
-          method: "POST",
-          body: JSON.stringify({
-            roomID: roomIDNum,
-            userID: userID,
-          }),
-        });
-    
+
+        const joinRoomRes = await fetch(
+          "https://picolor-backend-go.onrender.com/controller/room",
+          {
+            method: "POST",
+            body: JSON.stringify({
+              roomID: roomIDNum,
+              userID: userID,
+            }),
+          }
+        );
+
         if (!joinRoomRes.ok) {
           throw new Error(`HTTP error! status: ${joinRoomRes.status}`);
         }
-    
+
         window.location.href = `/PicoloR-frontend-farm/controller/?roomID=${roomID}&userID=${userID}`;
       } catch (err) {
         console.error("エラー:", err);
       }
     }
-    
+
     createUserAndRoom();
   };
 
@@ -141,12 +148,11 @@ export function ControllerJoin() {
         className={styles.field}
         requiredMark={false}
       >
-
         <Form.Item label={null}>
-        <SelectIconButtons
-          options={icons}
-          onChange={(id) => console.log("選択された ID:", id)} // ✅ フォームの値として ID を設定
-        />
+          <SelectIconButtons
+            options={icons}
+            onChange={(id) => console.log("選択された ID:", id)} // ✅ フォームの値として ID を設定
+          />
         </Form.Item>
 
         <Form.Item<FieldType>
