@@ -34,7 +34,7 @@ export function Main() {
         const data = await res.json();
         const roomID = data.roomID;
         console.log(roomID);
-        window.location.href = `/PicoloR-frontend-farm/room/${roomID}`;
+        window.location.href = `http://picolor-backet.s3-website-us-west-2.amazonaws.com/room/${roomID}`;
       })
       .catch((err) => {
         throw new Error(err);
