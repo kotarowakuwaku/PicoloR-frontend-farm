@@ -14,7 +14,7 @@ const container = document.querySelector("#root") as Element;
 const root = createRoot(container);
 
 root.render(
-  <BrowserRouter basename="/PicoloR-frontend-farm"> {/* ✅ basename を追加 */}
+  <BrowserRouter>
     <Routes>
       <Route path="/" element={<Main />} />
       <Route path="/test" element={<Test />} />

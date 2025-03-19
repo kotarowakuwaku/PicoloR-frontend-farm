@@ -210,7 +210,7 @@ export function GameHost() {
         if (!res.ok) {
           console.error("Error finishing the game");
         } else {
-          window.location.href = `/PicoloR-frontend-farm/result/${roomId}`;
+          window.location.href = `/result/${roomId}`;
         }
       })
       .catch((error) => {

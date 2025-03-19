@@ -16,7 +16,7 @@ export function Rooms() {
   const currentBaseURL = window.location.origin;
 
   const [url] = useState<string>(
-    `${currentBaseURL}/PicoloR-frontend-farm/controller/join?roomID=${roomId}`
+    `${currentBaseURL}/controller/join?roomID=${roomId}`
   );
 
   useEffect(() => {
@@ -97,7 +97,7 @@ export function Rooms() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      window.location.href = `/PicoloR-frontend-farm/room/${roomId}/hostUser`;
+      window.location.href = `/room/${roomId}/hostUser`;
     } catch (err) {
       console.error("Fetch error:", err);
     }

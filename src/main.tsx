@@ -3,6 +3,7 @@ import { css } from "../styled-system/css";
 import { createStyles } from "antd-style";
 import ExplainItem from "./components/ExplainItem";
 import BoxBorderedContainerWithTitle from "./components/BoxBorderedContainerWithTitle";
+import { useNavigate } from "react-router-dom";
 
 const useStyle = createStyles(() => ({
   homeButton: {
@@ -23,6 +24,7 @@ const useStyle = createStyles(() => ({
 
 export function Main() {
   const { styles } = useStyle();
+  const navigate = useNavigate();
 
   const subTitle = "色を探せ！ひらめきカラースナップ対決！";
 
@@ -34,7 +36,8 @@ export function Main() {
         const data = await res.json();
         const roomID = data.roomID;
         console.log(roomID);
-        window.location.href = `/PicoloR-frontend-farm/room/${roomID}`;
+        // window.location.href = `/PicoloR-frontend-farm/room/${roomID}`;
+        navigate(`/room/${roomID}`);
       })
       .catch((err) => {
         throw new Error(err);
