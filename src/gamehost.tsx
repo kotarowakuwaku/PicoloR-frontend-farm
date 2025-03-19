@@ -107,6 +107,10 @@ export function GameHost() {
   }, [modalVisible, startCountdown]);
 
   useEffect(() => {
+    setModalVisible(true);
+  }, []);
+
+  useEffect(() => {
     const fetchThemeColors = async () => {
       try {
         const response = await fetch(
