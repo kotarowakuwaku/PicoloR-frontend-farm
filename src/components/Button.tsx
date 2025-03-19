@@ -18,16 +18,6 @@ const Button = ({ text, type, onClick }: ButtonProps) => {
         borderRadius: '24px',
     };
 
-    const dashedStyle: CSSProperties = {
-        width: '100%',
-        height: '100%',
-        fontSize: '1.5rem',
-        textAlign: 'center',
-        padding: '17px 0',
-        borderStyle: 'dashed solid',
-        borderRadius: '24px',
-    };
-
     const grayStyle: CSSProperties = {
         width: '100%',
         height: '100%',

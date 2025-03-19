@@ -1,5 +1,4 @@
 import React from "react";
-import "../../styled-system/styles.css";
 import type { HeaderProps } from "../types/HeaderMode";
 import { HeaderMode } from "../types/HeaderMode";
 
