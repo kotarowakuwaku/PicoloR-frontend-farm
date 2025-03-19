@@ -51,6 +51,7 @@ export function ControllerJoin() {
     { id: "3", imageURL: "/swift-svgrepo-com.svg", name: "swift" },
     { id: "4", imageURL: "/bird.png", name: "ts" },
   ];
+  const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
 
   if (!roomID) {
     return (
@@ -119,7 +120,7 @@ export function ControllerJoin() {
           throw new Error(`HTTP error! status: ${joinRoomRes.status}`);
         }
 
-        window.location.href = `/PicoloR-frontend-farm/controller/?roomID=${roomID}&userID=${userID}`;
+        window.location.href = `/PicoloR-frontend-farm/controller/?roomID=${roomID}&userID=${userID}&icon=${selectedIcon}`;
       } catch (err) {
         console.error("エラー:", err);
       }
@@ -151,7 +152,12 @@ export function ControllerJoin() {
         <Form.Item label={null}>
           <SelectIconButtons
             options={icons}
-            onChange={(id) => console.log("選択された ID:", id)} // ✅ フォームの値として ID を設定
+            onChange={(id) => {
+              console.log("選択された ID:", id);
+              setSelectedIcon(
+                icons.find((icon) => icon.id === id)?.name || null
+              );
+            }} // ✅ フォームの値として ID を設定
           />
         </Form.Item>
 
