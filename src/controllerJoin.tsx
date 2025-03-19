@@ -47,10 +47,10 @@ export function ControllerJoin() {
   const roomIDNum = Number(roomID);
 
   const icons = [
-    { id: "1", imageURL: "/snake.png", name: "python" },
+    { id: "1", imageURL: "/snake.png", name: "go" },
     { id: "2", imageURL: "/gopher.png", name: "go" },
-    { id: "3", imageURL: "/swift-svgrepo-com.svg", name: "swift" },
-    { id: "4", imageURL: "/bird.png", name: "ts" },
+    { id: "3", imageURL: "/swift-svgrepo-com.svg", name: "go" },
+    { id: "4", imageURL: "/bird.png", name: "typescript" },
   ];
   const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
 
@@ -89,7 +89,7 @@ export function ControllerJoin() {
     async function createUserAndRoom() {
       try {
         const userRes = await fetch(
-          `https://picolor-backend-go.onrender.com/controller/user`,
+          `https://picolor-backend-${selectedIcon}.onrender.com/controller/user`,
           {
             method: "POST",
             body: JSON.stringify({
@@ -107,7 +107,7 @@ export function ControllerJoin() {
         console.log(userID);
 
         const joinRoomRes = await fetch(
-          `https://picolor-backend-go.onrender.com/controller/room`,
+          `https://picolor-backend-${selectedIcon}.onrender.com/controller/room`,
           {
             method: "POST",
             body: JSON.stringify({
@@ -129,7 +129,7 @@ export function ControllerJoin() {
           console.error(error);
         }
 
-        window.location.href = `/PicoloR-frontend-farm/controller/?roomID=${roomID}&userID=${userID}`;
+        // window.location.href = `/PicoloR-frontend-farm/controller/?roomID=${roomID}&userID=${userID}`;
       } catch (err) {
         console.error("エラー:", err);
       }
