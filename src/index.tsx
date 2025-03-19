@@ -6,7 +6,6 @@ import { GameHost } from "./gamehost"; // 新しく作成したTestコンポー�
 import { Result } from "./result";
 import { Test } from "./test";
 import "./index.css";
-import "../styled-system/styles.css";
 import { ControllerJoin } from "./controllerJoin";
 import { ControllerPlaying } from "./controllerPlaying";
 
